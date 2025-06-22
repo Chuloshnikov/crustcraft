@@ -7,3 +7,10 @@ interface PizzaTypes {
     image: string;
     popular: boolean;
 }
+
+interface AuthFormTypes {
+    name?: string;
+    email: string;
+    password: string;
+
+}

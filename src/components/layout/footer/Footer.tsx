@@ -13,13 +13,13 @@ const Footer = () => {
               </div>
               <span className="text-2xl font-bold">CRUSTCRAFT</span>
             </div>
-            <p className="text-gray-400">
+            <p className="text-gray-300">
               Crafting the perfect pizza experience since 2020. Made with love, served with passion.
             </p>
             <div className="flex space-x-4">
-              <Facebook className="h-5 w-5 text-gray-400 hover:text-orange-500 cursor-pointer transition-colors" />
-              <Twitter className="h-5 w-5 text-gray-400 hover:text-orange-500 cursor-pointer transition-colors" />
-              <Instagram className="h-5 w-5 text-gray-400 hover:text-orange-500 cursor-pointer transition-colors" />
+              <Facebook className="h-5 w-5 text-gray-300 hover:text-orange-500 cursor-pointer transition-colors" />
+              <Twitter className="h-5 w-5 text-gray-300 hover:text-orange-500 cursor-pointer transition-colors" />
+              <Instagram className="h-5 w-5 text-gray-300 hover:text-orange-500 cursor-pointer transition-colors" />
             </div>
           </div>
 
@@ -28,27 +28,27 @@ const Footer = () => {
             <h3 className="font-bold text-lg mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">
+                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
                   Home
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">
+                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
                   Menu
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">
+                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
                   About Us
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">
+                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
                   Contact
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">
+                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
                   Careers
                 </a>
               </li>
@@ -60,27 +60,27 @@ const Footer = () => {
             <h3 className="font-bold text-lg mb-4">Menu</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">
+                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
                   Classic Pizzas
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">
+                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
                   Specialty Pizzas
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">
+                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
                   Appetizers
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">
+                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
                   Desserts
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">
+                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
                   Beverages
                 </a>
               </li>
@@ -93,21 +93,21 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <MapPin className="h-5 w-5 text-orange-500" />
-                <span className="text-gray-400">123 Pizza Street, Food City, FC 12345</span>
+                <span className="text-gray-300">123 Pizza Street, Food City, FC 12345</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-orange-500" />
-                <span className="text-gray-400">(555) 123-PIZZA</span>
+                <span className="text-gray-300">(555) 123-PIZZA</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-orange-500" />
-                <span className="text-gray-400">hello@crustcraft.com</span>
+                <span className="text-gray-300">hello@crustcraft.com</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+        <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-300">
           <p>&copy; 2024 CrustCraft. All rights reserved. Made with ❤️ for pizza lovers.</p>
         </div>
       </div>

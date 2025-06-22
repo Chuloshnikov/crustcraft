@@ -38,12 +38,20 @@ const Header = () => {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" className="cursor-pointer text-gray-700 hover:text-orange-600">
-              Login
-            </Button>
-            <Button className="cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
-              Register
-            </Button>
+            <Link
+            href={"/login"}
+                >
+                <Button variant="ghost" className="cursor-pointer text-gray-700 hover:text-orange-600">
+                  Login
+                </Button>
+            </Link>
+            <Link
+            href={"/register"}
+            >
+              <Button className="cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
+                Register
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -69,12 +77,22 @@ const Header = () => {
                 Contact
               </a>
               <div className="flex flex-col space-y-2 pt-4">
-                <Button variant="ghost" className="cursor-pointer justify-start">
-                  Login
-                </Button>
-                <Button className="cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
-                  Register
-                </Button>
+                <Link
+                href={"/login"}
+                >
+                  <Button variant="ghost" className="cursor-pointer justify-start">
+                    Login
+                  </Button>
+                </Link>
+                 
+                <Link
+                href={"/register"}
+                >
+                  <Button className="cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
+                    Register
+                  </Button>
+                </Link>
+               
               </div>
             </nav>
           </div>
