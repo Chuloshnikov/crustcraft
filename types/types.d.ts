@@ -14,3 +14,5 @@ interface AuthFormTypes {
     password: string;
 
 }
+
+

@@ -3,22 +3,14 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
-import { Eye, EyeOff, Lock, Mail, Pizza, SeparatorHorizontal } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, Pizza, SeparatorHorizontal, User } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Checkbox } from '../ui/checkbox';
 
+import { signIn } from 'next-auth/react';
 
-
-
-const SignInButton = (handleSubmit) => {
-
-};
-
-const SignUpButton = (handleSubmit) => {
-
-}
 
 const AuthForm = ({ formType }: {formType: string}) => {
    const [showPassword, setShowPassword] = useState(false)
@@ -32,25 +24,47 @@ const AuthForm = ({ formType }: {formType: string}) => {
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError("")
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
 
-    // Simulate API call
+   
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-
-      // Basic validation
-      if (!formData.email || !formData.password) {
+      if (formType === "login") {
+        if (!formData.email || !formData.password) {
         throw new Error("Please fill in all fields")
-      }
-
-      if (!formData.email.includes("@")) {
+        }
+        if (!formData.email.includes("@")) {
         throw new Error("Please enter a valid email address")
-      }
+        }
 
-      // Simulate successful login
-      console.log("Login successful:", formData)
+        await signIn('credentials', {
+          email: formData.email,
+          password: formData.password,
+          callbackUrl: '/',
+        });
+      } else {
+        if (!formData.name || !formData.email || !formData.password) {
+        throw new Error("Please fill in all fields")
+        }
+        if (!formData.email.includes("@")) {
+        throw new Error("Please enter a valid email address")
+        }
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            password: formData.password,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await res.json();
+        console.log(data);
+      };
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed. Please try again.")
     } finally {
@@ -107,11 +121,11 @@ const AuthForm = ({ formType }: {formType: string}) => {
                         Name
                     </Label>
                     <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                         <Input
-                        id="email"
-                        type="email"
-                        placeholder="Enter your email"
+                        id="name"
+                        type="name"
+                        placeholder="Enter your name"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         className="pl-10 h-12 border-gray-200 focus:border-orange-500 focus:ring-orange-500"
@@ -123,7 +137,7 @@ const AuthForm = ({ formType }: {formType: string}) => {
             {/* Email Field */}
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium">
-                Email Address
+                Email
               </Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
