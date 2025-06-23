@@ -10,12 +10,15 @@ import { Input } from '../ui/input';
 import { Checkbox } from '../ui/checkbox';
 
 import { signIn } from 'next-auth/react';
+import FormInput from './FormInput';
+import { loginSchema, registerSchema } from '@/lib/validation';
+
+import { toast } from 'sonner';
 
 
 const AuthForm = ({ formType }: {formType: string}) => {
-   const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState("")
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,57 +27,59 @@ const AuthForm = ({ formType }: {formType: string}) => {
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
+  e.preventDefault();
+  setIsLoading(true);
 
-   
-
-    try {
+  try {
       if (formType === "login") {
-        if (!formData.email || !formData.password) {
-        throw new Error("Please fill in all fields")
-        }
-        if (!formData.email.includes("@")) {
-        throw new Error("Please enter a valid email address")
+        const result = loginSchema.safeParse(formData);
+        if (!result.success) {
+          throw new Error(result.error.errors[0].message);
         }
 
-        await signIn('credentials', {
-          email: formData.email,
-          password: formData.password,
+        const response = await signIn('credentials', {
+          email: result.data.email,
+          password: result.data.password,
           callbackUrl: '/',
+          redirect: false,
         });
+
+        if (response?.error) {
+          throw new Error("Invalid email or password");
+        }
+
       } else {
-        if (!formData.name || !formData.email || !formData.password) {
-        throw new Error("Please fill in all fields")
+        const result = registerSchema.safeParse(formData);
+        if (!result.success) {
+          throw new Error(result.error.errors[0].message);
         }
-        if (!formData.email.includes("@")) {
-        throw new Error("Please enter a valid email address")
-        }
+
         const res = await fetch('/api/register', {
           method: 'POST',
-          body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-            password: formData.password,
-          }),
+          body: JSON.stringify(result.data),
           headers: {
             'Content-Type': 'application/json',
           },
         });
+
         const data = await res.json();
-        console.log(data);
-      };
+        if (!res.ok) throw new Error(data.message || "Registration failed");
+
+        toast.success("Registration successful", {
+          description: "You can now log in.",
+        });
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed. Please try again.")
+      toast.error(err instanceof Error ? err.message : "Something went wrong", {
+        description: formType === "login" ? "Login failed" : "Registration failed",
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleGoogleLogin = () => {
-    console.log("Google login clicked")
-    // Implement Google OAuth here
+    signIn('google', {callbackUrl: '/'})
   }
 
 
@@ -107,52 +112,29 @@ const AuthForm = ({ formType }: {formType: string}) => {
         </CardHeader>
 
         <CardContent className="space-y-6">
-          {error && (
-            <div>
-                error
-            </div>
-          )}
-
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Name Field */}
+             {/* Name Field */}
             {formType !== "login" && (
-                <div className="space-y-2">
-                    <Label htmlFor="email" className="text-sm font-medium">
-                        Name
-                    </Label>
-                    <div className="relative">
-                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                        <Input
-                        id="name"
-                        type="name"
-                        placeholder="Enter your name"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="pl-10 h-12 border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                        required
-                        />
-                    </div>
-                </div>
+              <FormInput
+                id="name"
+                label="Name"
+                inputType="text"
+                value={formData.name}
+                onChange={(name) => setFormData({ ...formData, name })}
+                placeholder="Enter your name"
+                Icon={User}
+              />
             )}
             {/* Email Field */}
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium">
-                Email
-              </Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="pl-10 h-12 border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                  required
-                />
-              </div>
-            </div>
-
+            <FormInput
+              id="email"
+              label="Email"
+              inputType="email"
+              value={formData.email}
+              onChange={(email) => setFormData({ ...formData, email })}
+              placeholder="Enter your email"
+              Icon={Mail}
+            />
             {/* Password Field */}
             <div className="space-y-2">
               <Label htmlFor="password" className="text-sm font-medium">
@@ -162,7 +144,7 @@ const AuthForm = ({ formType }: {formType: string}) => {
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <Input
                   id="password"
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? 'text' : 'password'}
                   placeholder="Enter your password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -178,7 +160,6 @@ const AuthForm = ({ formType }: {formType: string}) => {
                 </button>
               </div>
             </div>
-
             {/* Remember Me & Forgot Password */}
             <div className={`${formType === "login" ? "" : "hidden"} flex items-center justify-between`}>
               <div className="flex items-center space-x-2">
@@ -195,7 +176,6 @@ const AuthForm = ({ formType }: {formType: string}) => {
                 Forgot password?
               </Link>
             </div>
-
             {/* Auth Button */}
             {formType === "login" ? (
                     <Button

@@ -4,6 +4,9 @@ import "./globals.css";
 import Header from "@/components/layout/header/Header";
 import Footer from "@/components/layout/footer/Footer";
 
+import { Toaster } from 'sonner';
+import Providers from "./providers";
+
 
 const roboto  = Roboto({
   variable: "--font-geist-mono",
@@ -27,11 +30,14 @@ export default function RootLayout({
       <body
         className={`${roboto.variable} antialiased`}
       >
-        <main>
-          <Header/>
-          {children}
-          <Footer/>
-        </main>
+        <Providers>
+            <main>
+              <Header/>
+              {children}
+              <Footer/>
+            </main>
+        <Toaster richColors position="top-center" />
+        </Providers>
       </body>
     </html>
   );
