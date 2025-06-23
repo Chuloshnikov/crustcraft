@@ -1,11 +1,21 @@
 "use client"
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
-import { Menu, X, Pizza } from "lucide-react";
+import { Menu, X, Pizza, User } from "lucide-react";
 import Link from 'next/link';
+import { signOut, useSession } from 'next-auth/react';
 
 const Header = () => {
-     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const session = useSession();
+    const status = session?.status;
+    const userData = session.data?.user;
+    let userName = userData?.name || userData?.email;
+    if (userName && userName.includes(" ")) {
+        userName = userName.split(' ')[0];
+    }
+    console.log(session);
+
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-orange-100">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -38,20 +48,41 @@ const Header = () => {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Link
-            href={"/login"}
-                >
-                <Button variant="ghost" className="cursor-pointer text-gray-700 hover:text-orange-600">
-                  Login
-                </Button>
-            </Link>
-            <Link
-            href={"/register"}
-            >
-              <Button className="cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
-                Register
-              </Button>
-            </Link>
+           
+            {status === 'authenticated' ? (
+  <div className="flex gap-2 items-center">
+    <Link href="/profile">
+      <Button
+        variant="ghost"
+        className="cursor-pointer text-gray-700 hover:text-orange-600 flex items-center gap-2"
+      >
+        <User className="h-5 w-5 text-orange-500" />
+        <span className="hidden md:inline-block whitespace-nowrap">
+          Hello, {userName}
+        </span>
+      </Button>
+    </Link>
+    <Button
+      onClick={() => signOut()}
+      className="cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
+    >
+      Logout
+    </Button>
+  </div>
+) : (
+  <>
+    <Link href="/login">
+      <Button variant="ghost" className="cursor-pointer text-gray-700 hover:text-orange-600">
+        Login
+      </Button>
+    </Link>
+    <Link href="/register">
+      <Button className="cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
+        Register
+      </Button>
+    </Link>
+  </>
+)}
           </div>
 
           {/* Mobile Menu Button */}
@@ -77,22 +108,47 @@ const Header = () => {
                 Contact
               </a>
               <div className="flex flex-col space-y-2 pt-4">
-                <Link
-                href={"/login"}
-                >
-                  <Button variant="ghost" className="cursor-pointer justify-start">
-                    Login
-                  </Button>
-                </Link>
-                 
-                <Link
-                href={"/register"}
-                >
-                  <Button className="cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
-                    Register
-                  </Button>
-                </Link>
-               
+            {status !== 'authenticated' ? (
+                    <>
+                      <Link href="/login" className="w-full">
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start text-gray-700 hover:text-orange-600"
+                        >
+                          Login
+                        </Button>
+                      </Link>
+
+                      <Link href="/register" className="w-full">
+                        <Button
+                          className="w-full justify-start bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
+                        >
+                          Register
+                        </Button>
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link href="/profile" className="w-full border rounded-md">
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start text-gray-700 hover:text-orange-600 flex items-center gap-2"
+                        >
+                          <User className="h-5 w-5 text-orange-500" />
+                          <span className="whitespace-nowrap">
+                            Hello, {userName}
+                          </span>
+                        </Button>
+                      </Link>
+
+                      <Button
+                        onClick={() => signOut()}
+                        className="w-full justify-start bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
+                      >
+                        Logout
+                      </Button>
+                    </>
+                  )}
               </div>
             </nav>
           </div>

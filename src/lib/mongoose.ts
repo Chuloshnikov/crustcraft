@@ -10,4 +10,4 @@ export const connectToDB = async () => {
   return mongoose.connect(MONGODB_URI, {
     dbName: 'crustcraft',
   });
-};z 
+};
