@@ -14,6 +14,7 @@ import FormInput from './FormInput';
 import { loginSchema, registerSchema } from '@/lib/validation';
 
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 
 const AuthForm = ({ formType }: {formType: string}) => {
@@ -24,7 +25,9 @@ const AuthForm = ({ formType }: {formType: string}) => {
     email: "",
     password: "",
     rememberMe: false,
-  })
+  });
+
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
@@ -43,6 +46,10 @@ const AuthForm = ({ formType }: {formType: string}) => {
           callbackUrl: '/',
           redirect: false,
         });
+
+        if (response?.ok) {
+          router.push("/");
+        }
 
         if (response?.error) {
           throw new Error("Invalid email or password");
