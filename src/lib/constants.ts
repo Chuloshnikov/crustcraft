@@ -41,3 +41,10 @@ export const ABOUT_FEATURES = [
     description: 'Serving our neighbors like family',
   },
 ];
+
+export const ABOUT_STATS = [
+    { number: "50,000+", label: "Happy Customers", description: "Served with love since 2020" },
+    { number: "25+", label: "Pizza Varieties", description: "From classic to creative" },
+    { number: "4.9/5", label: "Customer Rating", description: "Based on 2,000+ reviews" },
+    { number: "3", label: "Locations", description: "Growing across the city" },
+];
