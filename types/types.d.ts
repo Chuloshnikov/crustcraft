@@ -23,4 +23,10 @@ interface OurStoryItemProps {
     description: string;
 }
 
+interface AboutStatTypes {
+  number: string;
+  label: string;
+  description: string;
+};
+
 
