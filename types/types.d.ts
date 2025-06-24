@@ -23,10 +23,16 @@ interface OurStoryItemProps {
     description: string;
 }
 
-interface AboutStatTypes {
+interface AboutStatProps {
   number: string;
   label: string;
   description: string;
 };
+
+interface AboutValuesProps {
+    icon: LucideIcon;
+    title: string;
+    description: string;
+}
 
 

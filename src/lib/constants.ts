@@ -1,4 +1,4 @@
-import { Award, Heart, Users, Clock, Truck, Shield, } from "lucide-react";
+import { Award, Heart, Users, Clock, Truck, Shield, Leaf,  Sparkles } from "lucide-react";
 
 
 export const MAIN_FEATURES = [
@@ -48,3 +48,31 @@ export const ABOUT_STATS = [
     { number: "4.9/5", label: "Customer Rating", description: "Based on 2,000+ reviews" },
     { number: "3", label: "Locations", description: "Growing across the city" },
 ];
+
+
+export const ABOUT_VALUES = [
+    {
+      icon: Leaf,
+      title: "Fresh Ingredients",
+      description:
+        "We source the finest, freshest ingredients daily from local suppliers and import authentic Italian products for that perfect taste.",
+    },
+    {
+      icon: Clock,
+      title: "Time-Honored Tradition",
+      description:
+        "Our dough is made fresh daily using a 48-hour fermentation process, following recipes passed down through generations.",
+    },
+    {
+      icon: Shield,
+      title: "Quality Guarantee",
+      description:
+        "Every pizza meets our strict quality standards. If you're not completely satisfied, we'll make it right and better until you satisfied",
+    },
+    {
+      icon: Sparkles,
+      title: "Innovation & Creativity",
+      description:
+        "While respecting tradition, we're not afraid to innovate with seasonal specials and creative flavor combinations.",
+    },
+  ];
