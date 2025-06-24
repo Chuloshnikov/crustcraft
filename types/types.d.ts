@@ -1,3 +1,5 @@
+import { LucideIcon } from "lucide-react";
+
 interface PizzaTypes {
     id: number;
     name: string;
@@ -13,6 +15,12 @@ interface AuthFormTypes {
     email: string;
     password: string;
 
+}
+
+interface OurStoryItemProps {
+    icon: LucideIcon;
+    title: string;
+    description: string;
 }
 
 
