@@ -1,6 +1,6 @@
 import AboutHero from "@/components/about/hero/AboutHero";
 import  OurStory  from "@/components/about/our-story/OurStory";
-import TeamSection from "@/components/about/TeamSection";
+import TeamSection from "@/components/about/team/TeamSection";
 import ValuesSection from "@/components/about/values/ValuesSection"
 import StatsSection from "@/components/about/stats/StatsSection";
 import LocationSection from "@/components/about/LocationSection";

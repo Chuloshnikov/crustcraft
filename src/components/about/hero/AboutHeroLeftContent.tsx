@@ -33,7 +33,7 @@ const AboutHeroLeftContent = () => {
                     <Button
                     variant="outline"
                     size="lg"
-                    className="cursor-pointer border-white text-black/80 hover:bg-white/10 px-8 py-3 text-lg"
+                    className="cursor-pointer border-white bg-orange-300 text-black/80 hover:bg-white/10 px-8 py-3 text-lg"
                     >
                     <Play className="mr-2 h-5 w-5" />
                     Watch Our Story

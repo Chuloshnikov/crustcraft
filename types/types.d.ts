@@ -35,4 +35,13 @@ interface AboutValuesProps {
     description: string;
 }
 
+interface AboutTeamMemberCartTypes {
+    name: string;
+    role: string;
+    bio: string;
+    image: string;
+    specialties: string[];
+}
+
+
 

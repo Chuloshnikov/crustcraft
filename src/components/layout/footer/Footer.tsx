@@ -108,7 +108,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-300">
-          <p>&copy; 2024 CrustCraft. All rights reserved. Made with ❤️ for pizza lovers.</p>
+          <p>&copy; {new Date().getFullYear()} CrustCraft. All rights reserved. Made with ❤️ for pizza lovers.</p>
         </div>
       </div>
     </footer>

@@ -67,7 +67,7 @@ export const ABOUT_VALUES = [
       icon: Shield,
       title: "Quality Guarantee",
       description:
-        "Every pizza meets our strict quality standards. If you're not completely satisfied, we'll make it right and better until you satisfied",
+        "Every pizza we make meets our highest quality standards. If you're not fully satisfied, we'll make it right — and even better — until you are.",
     },
     {
       icon: Sparkles,
@@ -76,3 +76,34 @@ export const ABOUT_VALUES = [
         "While respecting tradition, we're not afraid to innovate with seasonal specials and creative flavor combinations.",
     },
   ];
+
+  export const ABOUT_TEAM = [
+    {
+      name: "Marco Rossi",
+      role: "Co-Founder & Head Chef",
+      bio: "Born in Naples, Marco brings 20+ years of authentic Italian cooking experience to every pizza.",
+      image: "/marcoRossy1.png",
+      specialties: ["Traditional Neapolitan", "Wood-fired Cooking", "Recipe Development"],
+    },
+    {
+      name: "Sofia Rossi",
+      role: "Co-Founder & Operations Manager",
+      bio: "Sofia ensures every customer experience exceeds expectations while maintaining our family values.",
+      image: "/sofiaRossi1.png",
+      specialties: ["Customer Experience", "Quality Control", "Team Leadership"],
+    },
+    {
+      name: "Antonio Martinez",
+      role: "Executive Chef",
+      bio: "Antonio's creative flair brings innovative flavors while respecting traditional techniques.",
+      image: "/placeholder.svg?height=300&width=300",
+      specialties: ["Creative Pizzas", "Seasonal Menus", "Staff Training"],
+    },
+    {
+      name: "Elena Chen",
+      role: "Pastry Chef",
+      bio: "Elena crafts our delicious desserts and manages our fresh bread and appetizer program.",
+      image: "/placeholder.svg?height=300&width=300",
+      specialties: ["Desserts", "Fresh Bread", "Appetizers"],
+    },
+  ]
