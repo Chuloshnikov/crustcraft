@@ -43,5 +43,13 @@ interface AboutTeamMemberCartTypes {
     specialties: string[];
 }
 
+interface LocationsPropTypes {
+  name: string;
+  address: string;
+  phone: string;
+  hours: string;
+  isMain: boolean;
+};
+
 
 

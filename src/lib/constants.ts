@@ -96,7 +96,7 @@ export const ABOUT_VALUES = [
       name: "Antonio Martinez",
       role: "Executive Chef",
       bio: "Antonio's creative flair brings innovative flavors while respecting traditional techniques.",
-      image: "/placeholder.svg?height=300&width=300",
+      image: "/martinez.png",
       specialties: ["Creative Pizzas", "Seasonal Menus", "Staff Training"],
     },
     {
@@ -106,4 +106,29 @@ export const ABOUT_VALUES = [
       image: "/placeholder.svg?height=300&width=300",
       specialties: ["Desserts", "Fresh Bread", "Appetizers"],
     },
-  ]
+  ];
+
+
+  export const ABOUT_LOCATIONS = [
+    {
+      name: "Downtown Location",
+      address: "123 Main Street, Downtown, City 12345",
+      phone: "(555) 123-PIZZA",
+      hours: "Mon-Thu: 11AM-10PM, Fri-Sat: 11AM-11PM, Sun: 12PM-9PM",
+      isMain: true,
+    },
+    {
+      name: "Westside Location",
+      address: "456 Oak Avenue, Westside, City 12346",
+      phone: "(555) 456-PIZZA",
+      hours: "Mon-Thu: 11AM-10PM, Fri-Sat: 11AM-11PM, Sun: 12PM-9PM",
+      isMain: false,
+    },
+    {
+      name: "Northside Location",
+      address: "789 Pine Boulevard, Northside, City 12347",
+      phone: "(555) 789-PIZZA",
+      hours: "Mon-Thu: 11AM-10PM, Fri-Sat: 11AM-11PM, Sun: 12PM-9PM",
+      isMain: false,
+    },
+  ];
