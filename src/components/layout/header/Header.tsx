@@ -41,7 +41,7 @@ const Header = () => {
             <a href={"/about"} className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
               About
             </a>
-            <a href="#" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
+            <a href={"/contact"} className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
               Contact
             </a>
           </nav>
@@ -104,7 +104,7 @@ const Header = () => {
               <a href={"/about"} className="text-gray-700 hover:text-orange-600 font-medium">
                 About
               </a>
-              <a href="#" className="text-gray-700 hover:text-orange-600 font-medium">
+              <a href={"/contact"} className="text-gray-700 hover:text-orange-600 font-medium">
                 Contact
               </a>
               <div className="flex flex-col space-y-2 pt-4">
