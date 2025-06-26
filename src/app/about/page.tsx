@@ -3,7 +3,7 @@ import  OurStory  from "@/components/about/our-story/OurStory";
 import TeamSection from "@/components/about/team/TeamSection";
 import ValuesSection from "@/components/about/values/ValuesSection"
 import StatsSection from "@/components/about/stats/StatsSection";
-import LocationSection from "@/components/about/LocationSection";
+import LocationSection from "@/components/about/location/LocationSection";
 
 export default function AboutPage() {
   return (
