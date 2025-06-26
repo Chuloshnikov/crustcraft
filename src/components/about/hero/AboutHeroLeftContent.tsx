@@ -19,7 +19,9 @@ const AboutHeroLeftContent = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-                <Link href={"/menu"}>
+                <Link 
+                href={"/menu"}
+                >
                     <Button
                     size="lg"
                     variant="secondary"
@@ -29,7 +31,11 @@ const AboutHeroLeftContent = () => {
                     <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
                 </Link>
-                <Link href={"/"}>
+                <Link 
+                href={"https://www.youtube.com/watch?v=nAMD6re5BjM"}
+                target="_blank"
+                rel="noopener noreferrer"
+                >
                     <Button
                     variant="outline"
                     size="lg"

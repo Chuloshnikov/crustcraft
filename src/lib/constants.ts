@@ -103,7 +103,7 @@ export const ABOUT_VALUES = [
       name: "Elena Chen",
       role: "Pastry Chef",
       bio: "Elena crafts our delicious desserts and manages our fresh bread and appetizer program.",
-      image: "/placeholder.svg?height=300&width=300",
+      image: "/elenaChan.png",
       specialties: ["Desserts", "Fresh Bread", "Appetizers"],
     },
   ];
@@ -132,3 +132,68 @@ export const ABOUT_VALUES = [
       isMain: false,
     },
   ];
+
+
+  export const CONTACT_LOCATIONS = [
+    {
+      name: "Downtown Location",
+      address: "123 Main Street, Downtown, City 12345",
+      phone: "(555) 123-PIZZA",
+      isMain: true,
+    },
+    {
+      name: "Westside Location",
+      address: "456 Oak Avenue, Westside, City 12346",
+      phone: "(555) 456-PIZZA",
+      isMain: false,
+    },
+    {
+      name: "Northside Location",
+      address: "789 Pine Boulevard, Northside, City 12347",
+      phone: "(555) 789-PIZZA",
+      isMain: false,
+    },
+  ];
+
+
+  export const CONTACT_BUSINESS_HOURS = [
+    { day: "Monday - Thursday", hours: "11:00 AM - 10:00 PM" },
+    { day: "Friday - Saturday", hours: "11:00 AM - 11:00 PM" },
+    { day: "Sunday", hours: "12:00 PM - 9:00 PM" },
+  ]
+
+
+  export const CONTACT_FAQS = [
+    {
+      question: "What are your delivery hours?",
+      answer:
+        "We deliver during all business hours: Monday-Thursday 11AM-10PM, Friday-Saturday 11AM-11PM, and Sunday 12PM-9PM. Delivery typically takes 30-45 minutes depending on location and order size.",
+    },
+    {
+      question: "Do you offer catering services?",
+      answer:
+        "Yes! We offer catering for events of all sizes. Please contact us at least 24 hours in advance for orders over 10 pizzas. We can accommodate dietary restrictions and provide setup services for larger events.",
+    },
+    {
+      question: "Can I make reservations?",
+      answer:
+        "We accept reservations for parties of 6 or more. For smaller groups, we operate on a first-come, first-served basis. You can make reservations by calling any of our locations directly.",
+    },
+    {
+      question: "Do you have gluten-free options?",
+      answer:
+        "Yes, we offer gluten-free pizza crusts and several gluten-free toppings. Please inform us of any allergies when ordering, as we prepare food in a shared kitchen environment.",
+    },
+    {
+      question: "What payment methods do you accept?",
+      answer:
+        "We accept cash, all major credit cards (Visa, MasterCard, American Express, Discover), and digital payments including Apple Pay, Google Pay, and contactless payments.",
+    },
+    {
+      question: "How can I apply for a job?",
+      answer:
+        "We're always looking for passionate team members! You can apply in person at any of our locations, email your resume to careers@crustcraft.com, or fill out our online application form.",
+    },
+  ];
+
+
