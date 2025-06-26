@@ -1,35 +1,12 @@
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { MapPin, Navigation } from "lucide-react"
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { MapPin, Navigation } from 'lucide-react';
+import React from 'react'
 
-export function LocationMap() {
+const LocationQuickAccess = () => {
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Find Us</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Visit us at any of our three convenient locations. Each offers the same great food and warm atmosphere.
-          </p>
-        </div>
-
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Map Placeholder */}
-          <div className="lg:col-span-2">
-            <Card className="shadow-lg border-0 overflow-hidden">
-              <div className="bg-gray-200 h-96 flex items-center justify-center">
-                <div className="text-center">
-                  <MapPin className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500 font-medium">Interactive Map</p>
-                  <p className="text-gray-400 text-sm">Google Maps integration would go here</p>
-                </div>
-              </div>
-            </Card>
-          </div>
-
-          {/* Location Quick Access */}
-          <div className="space-y-4">
-            <Card className="shadow-lg border-0">
+    <div className="space-y-4">
+        <Card className="shadow-lg border-0">
               <CardContent className="p-6">
                 <h3 className="font-bold text-lg mb-4">Downtown Location</h3>
                 <div className="space-y-3">
@@ -85,11 +62,10 @@ export function LocationMap() {
                     Get Directions
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </div>
-    </section>
+            </CardContent>
+        </Card>
+    </div>
   )
 }
+
+export default LocationQuickAccess;

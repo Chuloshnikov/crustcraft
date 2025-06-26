@@ -1,4 +1,5 @@
 import { Mail, MessageCircle, Phone } from 'lucide-react';
+import Link from 'next/link';
 
 const ContactHero = () => {
   return (
@@ -7,29 +8,29 @@ const ContactHero = () => {
         <div className="text-center max-w-3xl mx-auto">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">Get in Touch</h1>
           <p className="text-xl mb-8 text-orange-100">
-            We'd love to hear from you! Whether you have questions, feedback, or want to place a special order, we're
+            We&apos;d love to hear from you! Whether you have questions, feedback, or want to place a special order, we&apos;re
             here to help.
           </p>
 
           {/* Quick Contact Options */}
           <div className="grid md:grid-cols-3 gap-6 mt-12">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-colors">
+            <Link href={"tel:+555353535"} className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-colors">
               <Phone className="h-8 w-8 mx-auto mb-3" />
               <h3 className="font-semibold mb-2">Call Us</h3>
               <p className="text-orange-100">(555) 123-PIZZA</p>
-            </div>
+            </Link>
 
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-colors">
+            <Link href={"mailto:hello@crustcraft.com"} className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-colors">
               <Mail className="h-8 w-8 mx-auto mb-3" />
               <h3 className="font-semibold mb-2">Email Us</h3>
               <p className="text-orange-100">hello@crustcraft.com</p>
-            </div>
+            </Link>
 
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-colors">
+            <Link href={"/chat"} className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-colors">
               <MessageCircle className="h-8 w-8 mx-auto mb-3" />
               <h3 className="font-semibold mb-2">Live Chat</h3>
               <p className="text-orange-100">Available 9AM-9PM</p>
-            </div>
+            </Link>
           </div>
         </div>
       </div>
