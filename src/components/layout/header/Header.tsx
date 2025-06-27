@@ -35,7 +35,7 @@ const Header = () => {
             <a href={"/"} className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
               Home
             </a>
-            <a href="#" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
+            <a href={"/menu"} className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
               Menu
             </a>
             <a href={"/about"} className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
@@ -98,7 +98,7 @@ const Header = () => {
               <a href={"/"} className="text-gray-700 hover:text-orange-600 font-medium">
                 Home
               </a>
-              <a href="#" className="text-gray-700 hover:text-orange-600 font-medium">
+              <a href={"/menu"} className="text-gray-700 hover:text-orange-600 font-medium">
                 Menu
               </a>
               <a href={"/about"} className="text-gray-700 hover:text-orange-600 font-medium">
