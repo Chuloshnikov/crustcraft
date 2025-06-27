@@ -1,4 +1,4 @@
-import { Award, Heart, Users, Clock, Truck, Shield, Leaf,  Sparkles } from "lucide-react";
+import { Award, Heart, Users, Clock, Truck, Shield, Leaf,  Sparkles, Menu, Pizza, MapPin } from "lucide-react";
 
 
 export const MAIN_FEATURES = [
@@ -194,6 +194,14 @@ export const ABOUT_VALUES = [
       answer:
         "We're always looking for passionate team members! You can apply in person at any of our locations, email your resume to careers@crustcraft.com, or fill out our online application form.",
     },
+  ];
+
+
+  export const POPULAR_LINKS = [
+    { name: "Our Menu", href: "/menu", icon: Menu, description: "Browse our delicious pizzas" },
+    { name: "Order Online", href: "/menu", icon: Pizza, description: "Place your order now" },
+    { name: "Locations", href: "/contact", icon: MapPin, description: "Find us near you" },
+    { name: "About Us", href: "/about", icon: Heart, description: "Our story and values" },
   ];
 
 

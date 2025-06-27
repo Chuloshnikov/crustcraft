@@ -1,4 +1,4 @@
-import NotFoundContent from '@/components/not-found/NotFoundContenr'
+import NotFoundContent from '@/components/not-found/NotFoundContent'
 import React from 'react'
 
 export default function NotFound() {
