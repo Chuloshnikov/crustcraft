@@ -27,11 +27,13 @@ import { useSession } from "next-auth/react"
 import { redirect } from "next/navigation"
 import SuccessAlert from "./profile-ui/SuccessAlert";
 import ProfileHeader from "./profile-ui/ProfileHeader";
+import { LoadingContent } from "../loading/LoadingContent";
 
 export function ProfileContent() {
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
   const [showSuccess, setShowSuccess] = useState(false);
+
 
   const session = useSession();
   const { status } = session;
@@ -45,7 +47,6 @@ export function ProfileContent() {
     phone: "+1 (555) 123-4567",
     address: "123 Main Street, Downtown, City 12345",
     dateOfBirth: "1990-05-15",
-    city: "Pizza lover and food enthusiast. Always looking for the perfect slice!",
     admin: true,
   });
 
@@ -105,7 +106,7 @@ export function ProfileContent() {
 
   
   if (status === 'loading') {
-    return 'Loading';
+    return <LoadingContent />;
   };
 
   if (status === 'unauthenticated') {
@@ -121,7 +122,7 @@ export function ProfileContent() {
         <ProfileHeader userImage={userImage} userInfo={userInfo} />
 
         {showSuccess && (
-          <SuccessAlert/>
+          <SuccessAlert text={"Profile updated successfully!"}/>
         )}
 
         {/* Profile Tabs */}
