@@ -2,10 +2,11 @@ import {model, models, Schema} from "mongoose";
 
 export interface IUserInfo extends Document {
   email: string;
-  streetAddress: string;
-  postalCode: string;
-  city: string;
-  country: string;
+  firstName: string;
+  lastName: string;
+  avatarUrl: string;
+  dateOfBirth: string;
+  address: string;
   phone: string;
   admin: boolean;
 }
@@ -13,10 +14,11 @@ export interface IUserInfo extends Document {
 
 const UserInfoSchema = new Schema({
   email: {type: String, required: true},
-  streetAddress: {type: String},
-  postalCode: {type: String},
-  city: {type: String},
-  country: {type: String},
+  firstName: {type: String},
+  lastName: {type: String},
+  avatarUrl: {type: String},
+  dateOfBirth: {type: String},
+  address: {type: String},
   phone: {type: String},
   admin: {type: Boolean, default: false},
 }, {timestamps: true});
