@@ -1,7 +1,7 @@
 "use client"
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
-import { Menu, X, Pizza, User } from "lucide-react";
+import { Menu, X, Pizza, User, LogOut } from "lucide-react";
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 
@@ -14,7 +14,6 @@ const Header = () => {
     if (userName && userName.includes(" ")) {
         userName = userName.split(' ')[0];
     }
-    console.log(session);
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-orange-100">
@@ -143,8 +142,9 @@ const Header = () => {
 
                       <Button
                         onClick={() => signOut()}
-                        className="w-full justify-start bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
+                        className="w-full justify-start bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white flex items-center gap-2"
                       >
+                        <LogOut/>
                         Logout
                       </Button>
                     </>

@@ -1,20 +1,16 @@
 "use client"
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   User,
-  Mail,
-  Phone,
   Calendar,
   Settings,
   Heart,
@@ -24,26 +20,36 @@ import {
   Shield,
   Edit,
   Save,
-  Camera,
   Star,
-  CheckCircle,
 } from "lucide-react"
 import Image from "next/image"
+import { useSession } from "next-auth/react"
+import { redirect } from "next/navigation"
+import SuccessAlert from "./profile-ui/SuccessAlert";
+import ProfileHeader from "./profile-ui/ProfileHeader";
 
 export function ProfileContent() {
-  const [isEditing, setIsEditing] = useState(false)
-  const [activeTab, setActiveTab] = useState("profile")
-  const [showSuccess, setShowSuccess] = useState(false)
+  const [isEditing, setIsEditing] = useState(false);
+  const [activeTab, setActiveTab] = useState("profile");
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const session = useSession();
+  const { status } = session;
+  
 
   const [userInfo, setUserInfo] = useState({
-    firstName: "David",
-    lastName: "Johnson",
     email: "david.johnson@email.com",
+    firstName: "Max",
+    lastName: "Ch",
+    avatarUrl: "",
     phone: "+1 (555) 123-4567",
     address: "123 Main Street, Downtown, City 12345",
     dateOfBirth: "1990-05-15",
-    bio: "Pizza lover and food enthusiast. Always looking for the perfect slice!",
-  })
+    city: "Pizza lover and food enthusiast. Always looking for the perfect slice!",
+    admin: true,
+  });
+
+
 
   const recentOrders = [
     {
@@ -96,79 +102,26 @@ export function ProfileContent() {
     setTimeout(() => setShowSuccess(false), 3000)
   }
 
+
+  
+  if (status === 'loading') {
+    return 'Loading';
+  };
+
+  if (status === 'unauthenticated') {
+    return redirect('/login');
+  };
+
+  const userImage = session?.data?.user.image as string | undefined;
+
   return (
     <section className="py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Profile Header */}
-        <div className="mb-8">
-          <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl p-8 text-white relative overflow-hidden">
-            <div className="relative z-10">
-              <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-                {/* Avatar */}
-                <div className="relative">
-                  <Avatar className="w-24 h-24 border-4 border-white shadow-lg">
-                    <AvatarImage src="/placeholder.svg?height=96&width=96" alt="Profile" />
-                    <AvatarFallback className="text-2xl font-bold bg-white text-orange-600">
-                      {userInfo.firstName[0]}
-                      {userInfo.lastName[0]}
-                    </AvatarFallback>
-                  </Avatar>
-                  <Button
-                    size="sm"
-                    className="absolute -bottom-2 -right-2 bg-white text-orange-600 hover:bg-orange-50 rounded-full w-8 h-8 p-0"
-                  >
-                    <Camera className="h-4 w-4" />
-                  </Button>
-                </div>
+        <ProfileHeader userImage={userImage} userInfo={userInfo} />
 
-                {/* User Info */}
-                <div className="flex-1">
-                  <h1 className="text-3xl font-bold mb-2">
-                    Hello, {userInfo.firstName} {userInfo.lastName}!
-                  </h1>
-                  <p className="text-orange-100 mb-4">Member since January 2023</p>
-                  <div className="flex flex-wrap gap-4 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Mail className="h-4 w-4" />
-                      <span>{userInfo.email}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Phone className="h-4 w-4" />
-                      <span>{userInfo.phone}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Quick Stats */}
-                <div className="grid grid-cols-3 gap-4 text-center">
-                  <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3">
-                    <div className="text-2xl font-bold">24</div>
-                    <div className="text-xs text-orange-100">Orders</div>
-                  </div>
-                  <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3">
-                    <div className="text-2xl font-bold">3</div>
-                    <div className="text-xs text-orange-100">Favorites</div>
-                  </div>
-                  <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3">
-                    <div className="text-2xl font-bold">4.9</div>
-                    <div className="text-xs text-orange-100">Rating</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Background Decoration */}
-            <div className="absolute -top-4 -right-4 w-32 h-32 bg-white/10 rounded-full"></div>
-            <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-white/5 rounded-full"></div>
-          </div>
-        </div>
-
-        {/* Success Alert */}
         {showSuccess && (
-          <Alert className="mb-6 border-green-200 bg-green-50">
-            <CheckCircle className="h-4 w-4 text-green-600" />
-            <AlertDescription className="text-green-800">Profile updated successfully!</AlertDescription>
-          </Alert>
+          <SuccessAlert/>
         )}
 
         {/* Profile Tabs */}
