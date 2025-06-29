@@ -9,7 +9,7 @@ export interface IUserInfo extends Document {
   address: string;
   phone: string;
   admin: boolean;
-}
+};
 
 
 const UserInfoSchema = new Schema({

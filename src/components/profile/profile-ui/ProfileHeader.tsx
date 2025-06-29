@@ -1,9 +1,17 @@
-import { Button } from '@/components/ui/button';
+"use client"
+
+import EditableImage from '@/components/EditableImage';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { IUserInfo } from '@/models/UserInfo';
-import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
-import { Camera, Mail, Phone } from 'lucide-react';
+import {  Mail, Phone } from 'lucide-react';
+import React, { useState } from 'react';
+
+
 
 const ProfileHeader = ({ userImage, userInfo}: { userImage: string | undefined; userInfo: IUserInfo }) => {
+
+  const [userImageLink, setUserImageLink] = useState(userInfo.avatarUrl || userImage || "");
+
   return (
     <div className="mb-8">
           <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl p-8 text-white relative overflow-hidden">
@@ -13,7 +21,7 @@ const ProfileHeader = ({ userImage, userInfo}: { userImage: string | undefined; 
                 <div className="relative w-24 h-24">
                   <Avatar className="absolute w-full h-full border-4 border-white shadow-lg rounded-full overflow-hidden">
                     <AvatarImage 
-                      src={userInfo.avatarUrl ? userInfo.avatarUrl : userImage} 
+                      src={userImageLink} 
                       alt="Profile"
                       className="w-full h-full object-cover rounded-full" 
                     />
@@ -22,12 +30,7 @@ const ProfileHeader = ({ userImage, userInfo}: { userImage: string | undefined; 
                       {userInfo.lastName[0]}
                     </AvatarFallback>                  
                   </Avatar>
-                  <Button
-                    size="sm"
-                    className="cursor-pointer absolute -bottom-2 -right-2 bg-white text-orange-600 hover:bg-orange-50 rounded-full w-8 h-8 p-0"
-                  >
-                    <Camera className="h-4 w-4" />
-                  </Button>
+                   <EditableImage setLink={setUserImageLink}/>
                 </div>
                 {/* User Info */}
                 <div className="flex-1">
