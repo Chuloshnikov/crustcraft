@@ -1,5 +1,6 @@
 'use client';
 
+import GmailProfileWatcher from '@/components/GmailProfileWatcher';
 import { SessionProvider } from 'next-auth/react';
 import { ReactNode } from 'react';
 
@@ -8,7 +9,11 @@ type Props = {
 };
 
 const Providers = ({ children }: Props) => {
-  return <SessionProvider>{children}</SessionProvider>;
-};
-
+  return (
+  <SessionProvider>
+    <GmailProfileWatcher />
+      {children}
+    </SessionProvider>
+    );
+}
 export default Providers;

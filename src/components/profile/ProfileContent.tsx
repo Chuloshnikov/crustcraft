@@ -37,7 +37,7 @@ export function ProfileContent() {
 
   const session = useSession();
   const { status } = session;
-  
+
 
   const [userInfo, setUserInfo] = useState({
     email: "david.johnson@email.com",

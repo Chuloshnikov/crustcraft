@@ -51,5 +51,20 @@ interface LocationsPropTypes {
   isMain: boolean;
 };
 
+interface UserTypes {
+  email: string;
+  name: string;
+  image: string;
+};
+
+interface UserProfileTypes {
+  _id?: string;
+  name: string;
+  email: string;
+  image?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 
 

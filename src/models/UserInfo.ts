@@ -14,12 +14,12 @@ export interface IUserInfo extends Document {
 
 const UserInfoSchema = new Schema({
   email: {type: String, required: true},
-  firstName: {type: String},
-  lastName: {type: String},
-  avatarUrl: {type: String},
-  dateOfBirth: {type: String},
-  address: {type: String},
-  phone: {type: String},
+  firstName: {type: String, default: "first name" },
+  lastName: {type: String, default: "first name"},
+  avatarUrl: {type: String, default: ""},
+  dateOfBirth: {type: String, default: "1900-05-15"},
+  address: {type: String, default: "unknown"},
+  phone: {type: String, default: "unknown"},
   admin: {type: Boolean, default: false},
 }, {timestamps: true});
 
