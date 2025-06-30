@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectToDB } from '@/lib/mongoose';
 import { User } from '@/models/User';
 import { hashPassword } from '@/lib/hashPassword';
+import { UserInfo } from '@/models/UserInfo';
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,6 +26,10 @@ export async function POST(req: NextRequest) {
       email,
       password: hashedPassword,
     });
+
+    if (newUser) {
+      await UserInfo.create({email});
+    }
 
     return NextResponse.json(
       { message: 'User registered successfully', user: { id: newUser._id, email: newUser.email } },
