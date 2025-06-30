@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 
 const ProfileHeader = ({ userImage, userInfo}: { userImage: string | undefined; userInfo: IUserInfo }) => {
 
-  const [userImageLink, setUserImageLink] = useState(userInfo.avatarUrl || userImage || "");
+  const [userImageLink, setUserImageLink] = useState(userInfo?.avatarUrl || userImage || "");
 
   return (
     <div className="mb-8">
@@ -26,8 +26,8 @@ const ProfileHeader = ({ userImage, userInfo}: { userImage: string | undefined; 
                       className="w-full h-full object-cover rounded-full" 
                     />
                     <AvatarFallback className="text-2xl font-bold bg-white text-orange-600 flex items-center justify-center w-full h-full rounded-full">
-                      {userInfo.firstName[0]}
-                      {userInfo.lastName[0]}
+                      {userInfo?.firstName[0]}
+                      {userInfo?.lastName[0]}
                     </AvatarFallback>                  
                   </Avatar>
                    <EditableImage setLink={setUserImageLink}/>
@@ -35,17 +35,17 @@ const ProfileHeader = ({ userImage, userInfo}: { userImage: string | undefined; 
                 {/* User Info */}
                 <div className="flex-1">
                   <h1 className="text-3xl font-bold mb-2">
-                    Hello, {userInfo.firstName} {userInfo.lastName}!
+                    Hello, {userInfo?.firstName} {userInfo?.lastName}!
                   </h1>
                   <p className="text-orange-100 mb-4">Member since January 2023</p>
                   <div className="flex flex-wrap gap-4 text-sm">
                     <div className="flex items-center gap-2">
                       <Mail className="h-4 w-4" />
-                      <span>{userInfo.email}</span>
+                      <span>{userInfo?.email}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Phone className="h-4 w-4" />
-                      <span>{userInfo.phone}</span>
+                      <span>{userInfo?.phone}</span>
                     </div>
                   </div>
                 </div>

@@ -14,8 +14,8 @@ export interface IUserInfo extends Document {
 
 const UserInfoSchema = new Schema({
   email: {type: String, required: true},
-  firstName: {type: String, default: "first name" },
-  lastName: {type: String, default: "first name"},
+  firstName: {type: String, default: "unknown" },
+  lastName: {type: String, default: "unknown"},
   avatarUrl: {type: String, default: ""},
   dateOfBirth: {type: String, default: "1900-05-15"},
   address: {type: String, default: "unknown"},

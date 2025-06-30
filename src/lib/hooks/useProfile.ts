@@ -7,7 +7,7 @@ export const useProfile = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch('/api/profile')
+    fetch('/api/user-info')
       .then(response => response.json())
       .then(data => {
         setData(data);
