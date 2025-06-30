@@ -1,11 +1,10 @@
 "use client"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -28,27 +27,31 @@ import { redirect } from "next/navigation"
 import SuccessAlert from "./profile-ui/SuccessAlert";
 import ProfileHeader from "./profile-ui/ProfileHeader";
 import { LoadingContent } from "../loading/LoadingContent";
+import { IUserInfo } from "@/models/UserInfo";
 
 export function ProfileContent() {
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
   const [showSuccess, setShowSuccess] = useState(false);
-
+  const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
 
   const session = useSession();
   const { status } = session;
 
+  useEffect(() => {
+      if (status === 'authenticated') {
+         fetch('/api/user-info').then(response => {
+              response.json().then(data => {
+              setUserInfo(data);
+          });
+        })
+      }
+}, [session, status]);
 
-  const [userInfo, setUserInfo] = useState({
-    email: "david.johnson@email.com",
-    firstName: "Max",
-    lastName: "Ch",
-    avatarUrl: "",
-    phone: "+1 (555) 123-4567",
-    address: "123 Main Street, Downtown, City 12345",
-    dateOfBirth: "1990-05-15",
-    admin: true,
-  });
+
+
+
+  
 
 
 
@@ -186,7 +189,7 @@ export function ProfileContent() {
                     <Label htmlFor="firstName">First Name</Label>
                     <Input
                       id="firstName"
-                      value={userInfo.firstName}
+                      value={userInfo?.firstName}
                       onChange={(e) => setUserInfo({ ...userInfo, firstName: e.target.value })}
                       disabled={!isEditing}
                       className="h-12"
@@ -196,7 +199,7 @@ export function ProfileContent() {
                     <Label htmlFor="lastName">Last Name</Label>
                     <Input
                       id="lastName"
-                      value={userInfo.lastName}
+                      value={userInfo?.lastName}
                       onChange={(e) => setUserInfo({ ...userInfo, lastName: e.target.value })}
                       disabled={!isEditing}
                       className="h-12"
@@ -210,7 +213,7 @@ export function ProfileContent() {
                     <Input
                       id="email"
                       type="email"
-                      value={userInfo.email}
+                      value={userInfo?.email}
                       onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
                       disabled={!isEditing}
                       className="h-12"
@@ -220,7 +223,7 @@ export function ProfileContent() {
                     <Label htmlFor="phone">Phone Number</Label>
                     <Input
                       id="phone"
-                      value={userInfo.phone}
+                      value={userInfo?.phone}
                       onChange={(e) => setUserInfo({ ...userInfo, phone: e.target.value })}
                       disabled={!isEditing}
                       className="h-12"
@@ -232,7 +235,7 @@ export function ProfileContent() {
                   <Label htmlFor="address">Address</Label>
                   <Input
                     id="address"
-                    value={userInfo.address}
+                    value={userInfo?.address}
                     onChange={(e) => setUserInfo({ ...userInfo, address: e.target.value })}
                     disabled={!isEditing}
                     className="h-12"
@@ -244,22 +247,10 @@ export function ProfileContent() {
                   <Input
                     id="dateOfBirth"
                     type="date"
-                    value={userInfo.dateOfBirth}
+                    value={userInfo?.dateOfBirth}
                     onChange={(e) => setUserInfo({ ...userInfo, dateOfBirth: e.target.value })}
                     disabled={!isEditing}
                     className="h-12"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="bio">Bio</Label>
-                  <Textarea
-                    id="bio"
-                    value={userInfo.bio}
-                    onChange={(e) => setUserInfo({ ...userInfo, bio: e.target.value })}
-                    disabled={!isEditing}
-                    className="min-h-24 resize-none"
-                    placeholder="Tell us about yourself..."
                   />
                 </div>
               </CardContent>
