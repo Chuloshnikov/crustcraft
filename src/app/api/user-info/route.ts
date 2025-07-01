@@ -5,6 +5,9 @@ import { UserInfo } from "@/models/UserInfo";
 import { getServerSession } from "next-auth";
 
 
+
+
+
 export async function GET() {
     await connectToDB();
     const session = await getServerSession(authOptions);
