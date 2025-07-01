@@ -2,17 +2,21 @@
 
 import EditableImage from '@/components/EditableImage';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { IUserInfo } from '@/models/UserInfo';
 import {  Mail, Phone } from 'lucide-react';
-import React, { useState } from 'react';
 import { UserInfoProps } from '../../../../types/types';
+import React from 'react';
 
 
 
-const ProfileHeader = ({ userImage, userInfo}: { userImage: string | undefined; userInfo: UserInfoProps }) => {
-
-  const [userImageLink, setUserImageLink] = useState(userInfo?.avatarUrl || userImage || "");
-
+const ProfileHeader = ({ 
+  userImageLink, 
+  setUserImageLink, 
+  userInfo
+}: { 
+  userImageLink: string | undefined; 
+  setUserImageLink: React.Dispatch<React.SetStateAction<string>>;
+  userInfo: UserInfoProps 
+}) => {
   return (
     <div className="mb-8">
           <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl p-8 text-white relative overflow-hidden">
@@ -21,15 +25,17 @@ const ProfileHeader = ({ userImage, userInfo}: { userImage: string | undefined; 
                 {/* Avatar */}
                 <div className="relative w-24 h-24">
                   <Avatar className="absolute w-full h-full border-4 border-white shadow-lg rounded-full overflow-hidden">
-                    <AvatarImage 
+                    {userImageLink && (<AvatarImage 
                       src={userImageLink} 
                       alt="Profile"
-                      className="w-full h-full object-cover rounded-full" 
-                    />
-                    <AvatarFallback className="text-2xl font-bold bg-white text-orange-600 flex items-center justify-center w-full h-full rounded-full">
-                      {userInfo?.firstName[0]}
-                      {userInfo?.lastName[0]}
-                    </AvatarFallback>                  
+                      className="w-full h-full object-cover rounded-full"/>
+                    )}
+                    {!userImageLink && 
+                    (<AvatarFallback className="text-2xl font-bold bg-white text-orange-600 flex items-center justify-center w-full h-full rounded-full">
+                      {userInfo.firstName && userInfo?.firstName[0]}
+                      {userInfo.lastName && userInfo?.lastName[0]}
+                    </AvatarFallback>
+                    )}              
                   </Avatar>
                    <EditableImage setLink={setUserImageLink}/>
                 </div>

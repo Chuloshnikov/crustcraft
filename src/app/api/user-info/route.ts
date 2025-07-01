@@ -6,46 +6,56 @@ import { getServerSession } from "next-auth";
 
 
 export async function POST(req: Request) {
-    try {
-        await connectToDB();
-        const {
-            email,
-            firstName,
-            lastName,
-            avatarUrl,
-            dateOfBirth,
-            address,
-            phone,
-            admin
-        } = await req.json();
-        const session = await getServerSession(authOptions);
-        const userEntry = session?.user?.email;
-        if (!userEntry) {
-            return Response.json({ error: 'You need to be authenticated' }, { status: 404 });
-        }
+  try {
+    await connectToDB();
 
-        const existingUser = await UserInfo.findOne({ email });
-            if (existingUser && userEntry === email) {
-                existingUser.set({
-                     email,
-                    firstName,
-                    lastName,
-                    avatarUrl,
-                    dateOfBirth,
-                    address,
-                    phone,
-                    admin
-                });
-                await existingUser.save();
-            } else {
-                return Response.json({ error: 'You do not have permission' }, { status: 400 });
-            }
-    } catch (error) {
-      console.error('Error:', error);
-      return Response.json({ error: 'Internal server error' }, { status: 500 });
+    const {
+      email,
+      firstName,
+      lastName,
+      avatarUrl,
+      dateOfBirth,
+      address,
+      phone,
+      admin
+    } = await req.json();
+
+    const session = await getServerSession(authOptions);
+    const userEntry = session?.user?.email;
+
+    if (!userEntry) {
+      return Response.json({ error: 'You need to be authenticated' }, { status: 401 });
     }
-}
 
+    const existingUser = await UserInfo.findOne({ email });
+
+    if (!existingUser) {
+      return Response.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    if (userEntry !== email) {
+      return Response.json({ error: 'You do not have permission' }, { status: 403 });
+    }
+
+    existingUser.set({
+      firstName,
+      lastName,
+      avatarUrl,
+      dateOfBirth,
+      address,
+      phone,
+      admin
+    });
+
+    await existingUser.save();
+
+    return Response.json({ message: 'User updated successfully', user: existingUser }, { status: 200 });
+
+  } catch (error) {
+    console.error('Error:', error);
+    return Response.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
 
 export async function GET() {
     await connectToDB();

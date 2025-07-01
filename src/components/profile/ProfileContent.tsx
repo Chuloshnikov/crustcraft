@@ -29,23 +29,35 @@ import ProfileHeader from "./profile-ui/ProfileHeader";
 import { LoadingContent } from "../loading/LoadingContent";
 import { UserInfoProps } from "../../../types/types";
 
+import { validateUserProfile, UserProfileType } from "@/lib/validation";
+
 export function ProfileContent() {
+  const { data: session, status } = useSession();
   //crutch for typing
   const emptyUserInfo: UserInfoProps = {
   email: "",
   firstName: "",
   lastName: "",
+  avatarUrl: "",
   phone: "",
   address: "",
   dateOfBirth: ""
 };
-
- const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
   const [showSuccess, setShowSuccess] = useState(false);
   const [userInfo, setUserInfo] = useState<UserInfoProps>(emptyUserInfo);
+  const [userImageLink, setUserImageLink] = useState(userInfo?.avatarUrl || session?.user?.image || "");
 
-  const { data: session, status } = useSession();
+  useEffect(() => {
+  if (userInfo?.avatarUrl) {
+    setUserImageLink(userInfo.avatarUrl);
+  } else if (session?.user?.image) {
+    setUserImageLink(session.user.image);
+  } else {
+    setUserImageLink("");
+  }
+}, [userInfo, session]);
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -102,12 +114,48 @@ export function ProfileContent() {
     },
   ];
 
-  const userImage = session?.user?.image ?? "";
+  
 
-  const handleSave = () => {
-    setIsEditing(false);
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
+  const handleSave = async () => {
+    const payload: UserProfileType = {
+    email: userInfo.email,
+    firstName: userInfo.firstName ?? "",
+    lastName: userInfo.lastName ?? "",
+    avatarUrl: userImageLink || undefined,
+    phone: userInfo.phone || undefined,
+    address: userInfo.address || undefined,
+    dateOfBirth: userInfo.dateOfBirth || undefined,
+    };
+
+    const validationErrors = validateUserProfile(payload);
+
+    if (validationErrors.length > 0) {
+      alert(`Validation error:\n${validationErrors.join("\n")}`);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/user-info", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        const { error } = await res.json();
+        alert(`Error: ${error}`);
+        return;
+      }
+
+      setIsEditing(false);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    } catch (error) {
+      console.error("An error occurred:", error);
+      alert("An unexpected error occurred. Please try again.");
+    }
   };
 
     if (status === "loading") {
@@ -122,7 +170,7 @@ export function ProfileContent() {
     <section className="py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Profile Header */}
-        {userInfo && <ProfileHeader userImage={userImage} userInfo={userInfo} />}
+        {userInfo && <ProfileHeader userImageLink={userImageLink} setUserImageLink={setUserImageLink} userInfo={userInfo} />}
 
         {showSuccess && <SuccessAlert text={"Profile updated successfully!"}/>}
 
@@ -180,7 +228,7 @@ export function ProfileContent() {
                     <Input
                       id="firstName"
                       value={userInfo?.firstName}
-                      
+                      onChange={(e) => setUserInfo({ ...userInfo, firstName: e.target.value })}
                       disabled={!isEditing}
                       className="h-12"
                     />
@@ -189,6 +237,7 @@ export function ProfileContent() {
                     <Label htmlFor="lastName">Last Name</Label>
                     <Input
                       id="lastName"
+                      type="text"
                       value={userInfo?.lastName}
                       onChange={(e) => setUserInfo({ ...userInfo, lastName: e.target.value })}
                       disabled={!isEditing}
@@ -205,7 +254,7 @@ export function ProfileContent() {
                       type="email"
                       value={userInfo?.email}
                       onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
-                      disabled={!isEditing}
+                      disabled={true}
                       className="h-12"
                     />
                   </div>

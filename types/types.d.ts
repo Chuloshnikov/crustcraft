@@ -70,6 +70,7 @@ interface UserInfoProps {
   email: string;
   firstName?: string;
   lastName?: string;
+  avatarUrl?: string;
   phone?: string;
   address?: string;
   dateOfBirth?: string;
