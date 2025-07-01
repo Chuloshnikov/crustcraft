@@ -64,6 +64,15 @@ interface UserProfileTypes {
   image?: string;
   createdAt?: string;
   updatedAt?: string;
+};
+
+interface UserInfoProps {
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  address?: string;
+  dateOfBirth?: string;
 }
 
 

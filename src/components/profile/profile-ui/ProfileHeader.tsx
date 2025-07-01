@@ -5,10 +5,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { IUserInfo } from '@/models/UserInfo';
 import {  Mail, Phone } from 'lucide-react';
 import React, { useState } from 'react';
+import { UserInfoProps } from '../../../../types/types';
 
 
 
-const ProfileHeader = ({ userImage, userInfo}: { userImage: string | undefined; userInfo: IUserInfo }) => {
+const ProfileHeader = ({ userImage, userInfo}: { userImage: string | undefined; userInfo: UserInfoProps }) => {
 
   const [userImageLink, setUserImageLink] = useState(userInfo?.avatarUrl || userImage || "");
 

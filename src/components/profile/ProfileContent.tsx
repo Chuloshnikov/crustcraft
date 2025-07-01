@@ -27,31 +27,33 @@ import { redirect } from "next/navigation"
 import SuccessAlert from "./profile-ui/SuccessAlert";
 import ProfileHeader from "./profile-ui/ProfileHeader";
 import { LoadingContent } from "../loading/LoadingContent";
-import { IUserInfo } from "@/models/UserInfo";
+import { UserInfoProps } from "../../../types/types";
 
 export function ProfileContent() {
-  const [isEditing, setIsEditing] = useState(false);
+  //crutch for typing
+  const emptyUserInfo: UserInfoProps = {
+  email: "",
+  firstName: "",
+  lastName: "",
+  phone: "",
+  address: "",
+  dateOfBirth: ""
+};
+
+ const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
   const [showSuccess, setShowSuccess] = useState(false);
-  const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
+  const [userInfo, setUserInfo] = useState<UserInfoProps>(emptyUserInfo);
 
-  const session = useSession();
-  const { status } = session;
+  const { data: session, status } = useSession();
 
   useEffect(() => {
-      if (status === 'authenticated') {
-         fetch('/api/user-info').then(response => {
-              response.json().then(data => {
-              setUserInfo(data);
-          });
-        })
-      }
-}, [session, status]);
-
-
-
-
-  
+    if (status === "authenticated") {
+      fetch("/api/user-info")
+        .then((response) => response.json())
+        .then((data) => setUserInfo(data));
+    }
+  }, [status]);
 
 
 
@@ -98,59 +100,47 @@ export function ProfileContent() {
       rating: 4.9,
       image: "/placeholder.svg?height=100&width=100",
     },
-  ]
+  ];
+
+  const userImage = session?.user?.image ?? "";
 
   const handleSave = () => {
-    setIsEditing(false)
-    setShowSuccess(true)
-    setTimeout(() => setShowSuccess(false), 3000)
+    setIsEditing(false);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+  };
+
+    if (status === "loading") {
+    return <LoadingContent />;
   }
 
-
-  
-  if (status === 'loading') {
-    return <LoadingContent />;
-  };
-
-  if (status === 'unauthenticated') {
-    return redirect('/login');
-  };
-
-  const userImage = session?.data?.user.image as string | undefined;
+  if (status === "unauthenticated") {
+    redirect("/login");
+  }
 
   return (
     <section className="py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Profile Header */}
-        <ProfileHeader userImage={userImage} userInfo={userInfo} />
+        {userInfo && <ProfileHeader userImage={userImage} userInfo={userInfo} />}
 
-        {showSuccess && (
-          <SuccessAlert text={"Profile updated successfully!"}/>
-        )}
+        {showSuccess && <SuccessAlert text={"Profile updated successfully!"}/>}
 
         {/* Profile Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:grid-cols-5">
-            <TabsTrigger value="profile" className="flex items-center gap-2">
-              <User className="h-4 w-4" />
-              <span className="hidden sm:inline">Profile</span>
-            </TabsTrigger>
-            <TabsTrigger value="orders" className="flex items-center gap-2">
-              <ShoppingBag className="h-4 w-4" />
-              <span className="hidden sm:inline">Orders</span>
-            </TabsTrigger>
-            <TabsTrigger value="favorites" className="flex items-center gap-2">
-              <Heart className="h-4 w-4" />
-              <span className="hidden sm:inline">Favorites</span>
-            </TabsTrigger>
-            <TabsTrigger value="payment" className="flex items-center gap-2">
-              <CreditCard className="h-4 w-4" />
-              <span className="hidden sm:inline">Payment</span>
-            </TabsTrigger>
-            <TabsTrigger value="settings" className="flex items-center gap-2">
-              <Settings className="h-4 w-4" />
-              <span className="hidden sm:inline">Settings</span>
-            </TabsTrigger>
+           <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:grid-cols-5">
+            {[
+              { value: "profile", icon: User, label: "Profile" },
+              { value: "orders", icon: ShoppingBag, label: "Orders" },
+              { value: "favorites", icon: Heart, label: "Favorites" },
+              { value: "payment", icon: CreditCard, label: "Payment" },
+              { value: "settings", icon: Settings, label: "Settings" }
+            ].map(({ value, icon: Icon, label }) => (
+              <TabsTrigger key={value} value={value} className="flex items-center gap-2">
+                <Icon className="h-4 w-4" />
+                <span className="hidden sm:inline">{label}</span>
+              </TabsTrigger>
+            ))}
           </TabsList>
 
           {/* Profile Tab */}
@@ -190,7 +180,7 @@ export function ProfileContent() {
                     <Input
                       id="firstName"
                       value={userInfo?.firstName}
-                      onChange={(e) => setUserInfo({ ...userInfo, firstName: e.target.value })}
+                      
                       disabled={!isEditing}
                       className="h-12"
                     />
