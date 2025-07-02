@@ -74,6 +74,7 @@ interface UserInfoProps {
   phone?: string;
   address?: string;
   dateOfBirth?: string;
+  admin?: boolean;
 }
 
 
