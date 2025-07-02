@@ -46,43 +46,42 @@ const Header = () => {
           </nav>
 
           {/* Desktop Auth Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
-           
-            {status === 'authenticated' ? (
-  <div className="flex gap-2 items-center">
-    <Link href="/profile">
-      <Button
-        variant="ghost"
-        className="cursor-pointer text-gray-700 hover:text-orange-600 flex items-center gap-2"
-      >
-        <User className="h-5 w-5 text-orange-500" />
-        <span className="hidden md:inline-block whitespace-nowrap">
-          Hello, {userName}
-        </span>
-      </Button>
-    </Link>
-    <Button
-      onClick={() => signOut()}
-      className="cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
-    >
-      Logout
-    </Button>
-  </div>
-) : (
-  <>
-    <Link href="/login">
-      <Button variant="ghost" className="cursor-pointer text-gray-700 hover:text-orange-600">
-        Login
-      </Button>
-    </Link>
-    <Link href="/register">
-      <Button className="cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
-        Register
-      </Button>
-    </Link>
-  </>
-)}
-          </div>
+        <div className="hidden md:flex items-center space-x-4">
+                {status === 'loading' ? null : status === 'authenticated' ? (
+                  <div className="flex gap-2 items-center">
+                    <Link href="/profile">
+                      <Button
+                        variant="ghost"
+                        className="cursor-pointer text-gray-700 hover:text-orange-600 flex items-center gap-2"
+                      >
+                        <User className="h-5 w-5 text-orange-500" />
+                        <span className="hidden md:inline-block whitespace-nowrap">
+                          Hello, {userName}
+                        </span>
+                      </Button>
+                    </Link>
+                    <Button
+                      onClick={() => signOut()}
+                      className="cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
+                    >
+                      Logout
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    <Link href="/login">
+                      <Button variant="ghost" className="cursor-pointer text-gray-700 hover:text-orange-600">
+                        Login
+                      </Button>
+                    </Link>
+                    <Link href="/register">
+                      <Button className="cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
+                        Register
+                      </Button>
+                    </Link>
+                  </>
+              )}
+        </div>
 
           {/* Mobile Menu Button */}
           <button className="md:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -107,48 +106,47 @@ const Header = () => {
                 Contact
               </a>
               <div className="flex flex-col space-y-2 pt-4">
-            {status !== 'authenticated' ? (
-                    <>
-                      <Link href="/login" className="w-full">
-                        <Button
-                          variant="ghost"
-                          className="w-full justify-start text-gray-700 hover:text-orange-600"
-                        >
-                          Login
-                        </Button>
-                      </Link>
-
-                      <Link href="/register" className="w-full">
-                        <Button
-                          className="w-full justify-start bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
-                        >
-                          Register
-                        </Button>
-                      </Link>
-                    </>
-                  ) : (
-                    <>
-                      <Link href="/profile" className="w-full border rounded-md">
-                        <Button
-                          variant="ghost"
-                          className="w-full justify-start text-gray-700 hover:text-orange-600 flex items-center gap-2"
-                        >
-                          <User className="h-5 w-5 text-orange-500" />
-                          <span className="whitespace-nowrap">
-                            Hello, {userName}
-                          </span>
-                        </Button>
-                      </Link>
-
+                {status === 'loading' ? null : status === 'authenticated' ? (
+                  <>
+                    <Link href="/profile" className="w-full border rounded-md">
                       <Button
-                        onClick={() => signOut()}
-                        className="w-full justify-start bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white flex items-center gap-2"
+                        variant="ghost"
+                        className="w-full justify-start text-gray-700 hover:text-orange-600 flex items-center gap-2"
                       >
-                        <LogOut/>
-                        Logout
+                        <User className="h-5 w-5 text-orange-500" />
+                        <span className="whitespace-nowrap">
+                          Hello, {userName}
+                        </span>
                       </Button>
-                    </>
-                  )}
+                    </Link>
+
+                    <Button
+                      onClick={() => signOut()}
+                      className="w-full justify-start bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white flex items-center gap-2"
+                    >
+                      <LogOut />
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/login" className="w-full">
+                      <Button
+                      variant="ghost"
+                      className="w-full justify-start text-gray-700 hover:text-orange-600"
+                      >
+                      Login
+                      </Button>
+                    </Link>
+                    <Link href="/register" className="w-full">
+                        <Button
+                        className="w-full justify-start bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
+                        >
+                        Register
+                        </Button>
+                    </Link>
+                  </>
+                )}
               </div>
             </nav>
           </div>
