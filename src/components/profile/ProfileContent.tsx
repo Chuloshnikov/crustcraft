@@ -181,7 +181,7 @@ export function ProfileContent() {
               { value: "profile", icon: User, label: "Profile" },
               { value: "orders", icon: ShoppingBag, label: "Orders" },
               { value: "favorites", icon: Heart, label: "Favorites" },
-              { value: "payment", icon: CreditCard, label: "Payment" },
+              { value: "categories", icon: CreditCard, label: "Categories" },
               { value: "settings", icon: Settings, label: "Settings" }
             ].map(({ value, icon: Icon, label }) => (
               <TabsTrigger key={value} value={value} className="flex items-center gap-2">
