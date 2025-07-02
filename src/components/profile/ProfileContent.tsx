@@ -400,7 +400,7 @@ export function ProfileContent() {
           </TabsContent>
 
           {/* Payment Tab */}
-          <TabsContent value="payment">
+          <TabsContent value="categories">
             <Card className="shadow-lg border-0">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
