@@ -17,7 +17,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
 }) => {
   return (
     <div className="bg-gray-100 p-3 rounded-lg flex items-center justify-between">
-      <span className="text-gray-700">edit category: {category.name}</span>
+      <span className="text-gray-700">{category.name}</span>
       <div className="flex gap-2">
         <Button 
           onClick={() => {

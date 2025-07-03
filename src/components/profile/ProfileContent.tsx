@@ -8,6 +8,9 @@ import {
   Heart,
   ShoppingBag,
   CreditCard,
+  ChartColumnStacked,
+  ShoppingBasket,
+  Users,
 } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { redirect } from "next/navigation"
@@ -133,9 +136,9 @@ export function ProfileContent() {
                 { value: "payment", icon: CreditCard, label: "Payments" },
                 ...(userInfo?.admin
                   ? [
-                      { value: "categories", icon: CreditCard, label: "Categories" },
-                      { value: "menu-items", icon: CreditCard, label: "Menu Items" },
-                      { value: "users", icon: CreditCard, label: "Users" },
+                      { value: "categories", icon: ChartColumnStacked, label: "Categories" },
+                      { value: "menu-items", icon: ShoppingBasket, label: "Menu Items" },
+                      { value: "users", icon: Users, label: "Users" },
                     
                     ]
                   : []),
