@@ -77,5 +77,11 @@ interface UserInfoProps {
   admin?: boolean;
 }
 
+interface CategoryTypes {
+  _id?: string;
+  name: string;
+}
+
+
 
 

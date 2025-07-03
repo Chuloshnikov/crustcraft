@@ -22,6 +22,9 @@ import OrdersTab from "./profile-tabs/OrdersTab";
 import FavoritesTab from "./profile-tabs/FavoritesTab";
 import CategoriesTab from "./profile-tabs/CategoriesTab";
 import SettingsTab from "./profile-tabs/SettingsTab";
+import PaymentsTab from "./profile-tabs/PaymentsTab";
+import MenuItemsTab from "./profile-tabs/MenuItemsTab";
+import UsersTab from "./profile-tabs/UsersTab";
 
 export function ProfileContent() {
   const { data: session, status } = useSession();
@@ -34,7 +37,7 @@ export function ProfileContent() {
   phone: "",
   address: "",
   dateOfBirth: "",
-  admin:false
+  admin: false
 };
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
@@ -127,7 +130,7 @@ export function ProfileContent() {
                 { value: "profile", icon: User, label: "Profile" },
                 { value: "orders", icon: ShoppingBag, label: "Orders" },
                 { value: "favorites", icon: Heart, label: "Favorites" },
-                { value: "payments", icon: CreditCard, label: "Payments" },
+                { value: "payment", icon: CreditCard, label: "Payments" },
                 ...(userInfo?.admin
                   ? [
                       { value: "categories", icon: CreditCard, label: "Categories" },
@@ -162,8 +165,14 @@ export function ProfileContent() {
           {/* Categories Tab */}
           {userInfo?.admin && (<CategoriesTab/>)}
 
+          {/* Menu Items Tab */}
+          {userInfo?.admin && (<MenuItemsTab/>)}
+
+           {/* Users Tab */}
+           {userInfo?.admin && (<UsersTab/>)}
+
           {/* Payments Tab */}
-          {userInfo?.admin && (<CategoriesTab/>)}
+          <PaymentsTab/>
 
           {/* Settings Tab */}
           <SettingsTab/>
