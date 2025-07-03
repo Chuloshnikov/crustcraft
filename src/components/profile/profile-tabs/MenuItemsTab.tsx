@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TabsContent } from '@/components/ui/tabs';
 import { Pizza, Plus } from 'lucide-react';
+import Link from 'next/link';
 import React from 'react'
 
 const MenuItemsTab = () => {
@@ -13,10 +14,15 @@ const MenuItemsTab = () => {
                     <Pizza className="h-5 w-5 text-orange-600" />
                     Manage Menu Items
                   </CardTitle>
-                  <Button className="bg-red-500 hover:bg-red-600 text-white">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Create new menu item
+                  <Link
+                  href="/menu-items/new"
+                  >
+                    <Button className="cursor-pointer bg-red-500 hover:bg-red-600 text-white">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create new menu item
                   </Button>
+                  </Link>
+                
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -31,13 +37,17 @@ const MenuItemsTab = () => {
                           </div>
                         </div>
                         <div className="flex gap-2">
-                          <Button size="sm" variant="outline">
+                            <Link
+                            href="/menu-items/edit/12345"
+                          >
+                          <Button className='cursor-pointer' size="sm" variant="outline">
                             Edit
                           </Button>
+                          </Link>
                           <Button
                             size="sm"
                             variant="outline"
-                            className="text-red-600 hover:text-red-700 bg-transparent"
+                            className="cursor-pointer text-red-600 hover:text-red-700 bg-transparent"
                           >
                             Delete
                           </Button>
@@ -52,9 +62,13 @@ const MenuItemsTab = () => {
                           </div>
                         </div>
                         <div className="flex gap-2">
-                          <Button size="sm" variant="outline">
+                          <Link
+                            href="/menu-items/edit/12345"
+                          >
+                          <Button className='cursor-pointer' size="sm" variant="outline">
                             Edit
                           </Button>
+                          </Link>
                           <Button
                             size="sm"
                             variant="outline"

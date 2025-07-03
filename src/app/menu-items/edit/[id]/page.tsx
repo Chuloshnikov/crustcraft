@@ -1,7 +1,11 @@
-import React from 'react'
+import { EditMenuItemForm } from "@/components/profile/menu-items/EditMenuItemForm";
 
-export default function EditItem() {
+
+
+export default function EditItem({ params }: { params: { id: string } }) {
   return (
-    <div>EditItem</div>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50">
+        <EditMenuItemForm itemId={params.id} />
+    </div>
   )
 }

@@ -144,7 +144,7 @@ export function ProfileContent() {
                   : []),
                 { value: "settings", icon: Settings, label: "Settings" },
               ].map(({ value, icon: Icon, label }) => (
-                <TabsTrigger key={value} value={value} className="flex items-center gap-2">
+                <TabsTrigger key={value} value={value} className="cursor-pointer flex items-center gap-2">
                   <Icon className="h-4 w-4" />
                   <span className="hidden sm:inline">{label}</span>
                 </TabsTrigger>
