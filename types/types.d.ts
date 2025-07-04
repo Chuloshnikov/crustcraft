@@ -75,6 +75,8 @@ interface UserInfoProps {
   address?: string;
   dateOfBirth?: string;
   admin?: boolean;
+  createdAt?: string | Date | undefined;
+  updatedAt?: Date | Date | undefined;
 }
 
 interface CategoryTypes {

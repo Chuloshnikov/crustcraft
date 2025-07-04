@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {  Mail, Phone } from 'lucide-react';
 import { UserInfoProps } from '../../../../types/types';
 import React from 'react';
+import { formatMemberSince } from '@/lib/utils';
 
 
 
@@ -17,6 +18,11 @@ const ProfileHeader = ({
   setUserImageLink: React.Dispatch<React.SetStateAction<string>>;
   userInfo: UserInfoProps 
 }) => {
+
+
+  // Format member since date
+  const memberSince = formatMemberSince(userInfo?.createdAt as Date);
+
   return (
     <div className="mb-8">
           <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl p-8 text-white relative overflow-hidden">
@@ -44,7 +50,7 @@ const ProfileHeader = ({
                   <h1 className="text-3xl font-bold mb-2">
                     Hello, {userInfo?.firstName} {userInfo?.lastName}!
                   </h1>
-                  <p className="text-orange-100 mb-4">Member since January 2023</p>
+                  <p className="text-orange-100 mb-4">{memberSince}</p>
                   <div className="flex flex-wrap gap-4 text-sm">
                     <div className="flex items-center gap-2">
                       <Mail className="h-4 w-4" />
