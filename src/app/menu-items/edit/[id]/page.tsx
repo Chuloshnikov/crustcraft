@@ -1,33 +1,24 @@
+"use server"
 import { MenuItemForm } from "@/components/profile/menu-items/MenuItemForm";
 import { Category } from "@/models/Category";
+import { MenuItem } from "@/models/MenuItem";
 
 
 
 export default async function EditItem({ params }: { params: { id: string } }) {
 
+  const { id } = params;
+
   const categories = JSON.parse(JSON.stringify( await Category.find()));
+  const item = JSON.parse(JSON.stringify( await MenuItem.findById(id)));
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50">
         <MenuItemForm
-        itemId={params.id}
+        itemId={id}
         mode="edit"
-        initialData={{
-          image: "/path/to/image.jpg",
-          name: "Margherita Pizza",
-          description: "Classic pizza with tomato and mozzarella",
-          basePrice: "12.99",
-          category: "1",
-          sizes: [
-            { name: "Small", price: 0 },
-            { name: "Medium", price: 2 },
-            { name: "Large", price: 4 }
-          ],
-          extraIngredients: [
-            { name: "Extra Cheese", price: 1.5 },
-            { name: "Pepperoni", price: 2 }
-          ]
-        }}
+        initialData={item}
         categories={categories}
         onSuccessRedirect="/admin/menu-items"
       />
