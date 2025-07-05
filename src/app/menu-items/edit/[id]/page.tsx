@@ -20,7 +20,7 @@ export default async function EditItem({ params }: { params: { id: string } }) {
         mode="edit"
         initialData={item}
         categories={categories}
-        onSuccessRedirect="/admin/menu-items"
+        onSuccessRedirect="/profile"
       />
     </div>
   )
