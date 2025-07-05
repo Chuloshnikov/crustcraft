@@ -14,7 +14,7 @@ const ProfileHeader = ({
   setUserImageLink, 
   userInfo
 }: { 
-  userImageLink: string | undefined; 
+  userImageLink: string; 
   setUserImageLink: React.Dispatch<React.SetStateAction<string>>;
   userInfo: UserInfoProps 
 }) => {

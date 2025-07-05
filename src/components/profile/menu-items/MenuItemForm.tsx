@@ -24,8 +24,12 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
-import MenuItemImageUpload from "./MenuItemImageUpload"
 import { redirect } from "next/navigation"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { MenuItemFormData, MenuItemSchema } from "@/lib/validation"
+import MenuItemImageUpload from "./MenuItemImageUpload"
+
 
 interface SizeOption {
   name: string
@@ -60,127 +64,138 @@ interface MenuItemFormProps {
 
 export function MenuItemForm({
   mode = "create",
+  itemId = "",
   initialData = {},
   categories = [],
   onSuccessRedirect = "/profile",
 }: MenuItemFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [error, setError] = useState("");
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [error, setError] = useState("")
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
-  // Form state
-  const [image, setImage] = useState(initialData.image || "");
-  const [name, setName] = useState(initialData.name || "");
-  const [description, setDescription] = useState(initialData.description || "");
-  const [basePrice, setBasePrice] = useState(initialData.basePrice || "");
-  const [category, setCategory] = useState(initialData.category || "");
-  const [sizes, setSizes] = useState<SizeOption[]>(initialData.sizes || []);
-  const [extraIngredients, setExtraIngredients] = useState<ExtraIngredient[]>(initialData.extraIngredients || []);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<MenuItemFormData>({
+    resolver: zodResolver(MenuItemSchema),
+    defaultValues: {
+      image: initialData.image || null,
+      name: initialData.name || "",
+      description: initialData.description || "",
+      basePrice: initialData.basePrice ? parseFloat(initialData.basePrice) : 0,
+      category: initialData.category || "",
+      sizes: initialData.sizes || [],
+      extraIngredients: initialData.extraIngredients || [],
+    },
+  })
 
+  const formValues = watch()
 
   const addSize = () => {
-    setSizes([...sizes, { name: "", price: 0 }])
+    const currentSizes = formValues.sizes || []
+    setValue("sizes", [...currentSizes, { name: "", price: 0 }])
   }
 
   const removeSize = (index: number) => {
-    setSizes(sizes.filter((_, i) => i !== index))
+    const currentSizes = formValues.sizes || []
+    setValue("sizes", currentSizes.filter((_, i) => i !== index))
   }
 
   const updateSize = (index: number, field: keyof SizeOption, value: string | number) => {
-    const updatedSizes = sizes.map((size, i) =>
-      i === index ? { ...size, [field]: field === "price" ? Number(value) : value } : size,
+    const currentSizes = formValues.sizes || []
+    const updatedSizes = currentSizes.map((size, i) =>
+      i === index ? { ...size, [field]: field === "price" ? Number(value) : value } : size
     )
-    setSizes(updatedSizes)
+    setValue("sizes", updatedSizes)
   }
 
   const addExtraIngredient = () => {
-    setExtraIngredients([...extraIngredients, { name: "", price: 0 }])
+    const currentIngredients = formValues.extraIngredients || []
+    setValue("extraIngredients", [...currentIngredients, { name: "", price: 0 }])
   }
 
   const removeExtraIngredient = (index: number) => {
-    setExtraIngredients(extraIngredients.filter((_, i) => i !== index))
+    const currentIngredients = formValues.extraIngredients || []
+    setValue("extraIngredients", currentIngredients.filter((_, i) => i !== index))
   }
 
   const updateExtraIngredient = (index: number, field: keyof ExtraIngredient, value: string | number) => {
-    const updatedIngredients = extraIngredients.map((ingredient, i) =>
-      i === index ? { ...ingredient, [field]: field === "price" ? Number(value) : value } : ingredient,
+    const currentIngredients = formValues.extraIngredients || []
+    const updatedIngredients = currentIngredients.map((ingredient, i) =>
+      i === index ? { ...ingredient, [field]: field === "price" ? Number(value) : value } : ingredient
     )
-    setExtraIngredients(updatedIngredients)
+    setValue("extraIngredients", updatedIngredients)
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+
+  async function handleFormSubmit(data: MenuItemFormData) {
     setIsLoading(true)
     setError("")
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      const savingPromise = new Promise<void>(async (resolve, reject) => {
+        try {
+          const response = await fetch("/api/menu-items", {
+            method: mode === "create" ? "POST" : "PUT",
+            body: JSON.stringify({ ...data, itemId }),
+            headers: { "Content-Type": "application/json" },
+          })
 
-      // Basic validation
-      if (!name || !description || !basePrice || !category) {
-        throw new Error("Please fill in all required fields")
-      }
+          if (response.ok) {
+            resolve()
+          } else {
+            const errorData = await response.json()
+            reject(new Error(errorData.message || "Failed to save menu item"))
+          }
+        } catch (err) {
+          reject(err)
+        }
+      })
 
-      if (Number(basePrice) <= 0) {
-        throw new Error("Base price must be greater than 0")
-      }
+      toast.promise(savingPromise, {
+        loading: "Saving menu item...",
+        success: "Menu item saved successfully!",
+        error: (err) => err.message || "Error saving menu item",
+      })
 
-      // Simulate successful save
       setIsSuccess(true)
       setTimeout(() => {
-        // Redirect to menu items list
-        window.location.href = onSuccessRedirect
+        redirect(onSuccessRedirect)
       }, 1500)
     } catch (err) {
-      setError(err instanceof Error ? err.message : `Failed to ${mode} menu item`)
+      setError(err instanceof Error ? err.message : "Failed to save menu item")
     } finally {
       setIsLoading(false)
     }
   }
-
-async function handleFormSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const data = {
-        image,name,description,basePrice,sizes,extraIngredients,category,
-    }
-    const savingPromise = new Promise<void>(async (resolve, reject) => {
-      const response = await fetch('/api/menu-items', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: { 'Content-Type': 'application/json' },
-      });
-      if (response.ok)
-        resolve();
-      else
-        reject();
-    });
-
-    await toast.promise(savingPromise, {
-      loading: 'Saving this tasty item',
-      success: 'Saved',
-      error: 'Error',
-    });
-
-    redirect(onSuccessRedirect);
-  }
-
 
   const handleDelete = async () => {
     setIsDeleting(true)
     setError("")
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      const deletePromise = fetch(`/api/menu-items?id=${itemId}`, {
+        method: "DELETE",
+      }).then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to delete menu item")
+        }
+      })
 
-      // Simulate successful delete
+      toast.promise(deletePromise, {
+        loading: "Deleting menu item...",
+        success: "Menu item deleted successfully!",
+        error: "Failed to delete menu item",
+      })
+
       setIsSuccess(true)
       setTimeout(() => {
-        // Redirect to menu items list
-        window.location.href = onSuccessRedirect
+        redirect(onSuccessRedirect)
       }, 1500)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete menu item")
@@ -189,9 +204,8 @@ async function handleFormSubmit(e: React.FormEvent) {
       setShowDeleteConfirm(false)
     }
   }
-
-   
-  
+  console.log(formValues.image);
+  console.log(formValues.name);
 
   if (isSuccess) {
     return (
@@ -260,10 +274,13 @@ async function handleFormSubmit(e: React.FormEvent) {
             </Alert>
           )}
 
-          <form onSubmit={handleFormSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-8">
             <div className="grid lg:grid-cols-3 gap-8">
               {/* Image Upload */}
-                <MenuItemImageUpload image={image} setImage={setImage}/>
+              <MenuItemImageUpload 
+              image={formValues.image || null} 
+              setValue={setValue}  
+              />
 
               {/* Basic Information */}
               <div className="lg:col-span-2">
@@ -282,19 +299,21 @@ async function handleFormSubmit(e: React.FormEvent) {
                         </Label>
                         <Input
                           id="name"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
+                          {...register("name")}
                           placeholder="e.g., Margherita Pizza"
                           className="h-12"
-                          required
                         />
+                        {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
                       </div>
 
                       <div className="space-y-2">
                         <Label htmlFor="category">
                           Category <span className="text-red-500">*</span>
                         </Label>
-                        <Select value={category} onValueChange={setCategory} required>
+                        <Select
+                          value={formValues.category}
+                          onValueChange={(value) => setValue("category", value)}
+                        >
                           <SelectTrigger className="h-12">
                             <SelectValue placeholder="Select a category" />
                           </SelectTrigger>
@@ -306,6 +325,7 @@ async function handleFormSubmit(e: React.FormEvent) {
                             ))}
                           </SelectContent>
                         </Select>
+                        {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>}
                       </div>
                     </div>
 
@@ -315,12 +335,11 @@ async function handleFormSubmit(e: React.FormEvent) {
                       </Label>
                       <Textarea
                         id="description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
+                        {...register("description")}
                         placeholder="Describe your delicious menu item..."
                         className="min-h-24 resize-none"
-                        required
                       />
+                      {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>}
                     </div>
 
                     <div className="space-y-2">
@@ -334,13 +353,12 @@ async function handleFormSubmit(e: React.FormEvent) {
                           type="number"
                           step="0.01"
                           min="0"
-                          value={basePrice}
-                          onChange={(e) => setBasePrice(e.target.value)}
+                          {...register("basePrice", { valueAsNumber: true })}
                           placeholder="0.00"
                           className="pl-10 h-12"
-                          required
                         />
                       </div>
+                      {errors.basePrice && <p className="text-red-500 text-sm mt-1">{errors.basePrice.message}</p>}
                     </div>
                   </CardContent>
                 </Card>
@@ -360,11 +378,11 @@ async function handleFormSubmit(e: React.FormEvent) {
                 </Button>
               </CardHeader>
               <CardContent>
-                {sizes.length === 0 ? (
-                <p className="text-gray-500 text-center py-8">No size options added yet</p>
+                {formValues.sizes?.length === 0 ? (
+                  <p className="text-gray-500 text-center py-8">No size options added yet</p>
                 ) : (
                   <div className="space-y-4">
-                    {sizes.map((size, index) => (
+                    {formValues.sizes?.map((size, index) => (
                       <div key={index} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                         <div className="flex-1">
                           <Input
@@ -372,6 +390,9 @@ async function handleFormSubmit(e: React.FormEvent) {
                             value={size.name}
                             onChange={(e) => updateSize(index, "name", e.target.value)}
                           />
+                          {errors.sizes?.[index]?.name && (
+                            <p className="text-red-500 text-sm mt-1">{errors.sizes[index]?.name?.message}</p>
+                          )}
                         </div>
                         <div className="w-32">
                           <div className="relative">
@@ -386,6 +407,9 @@ async function handleFormSubmit(e: React.FormEvent) {
                               className="pl-8"
                             />
                           </div>
+                          {errors.sizes?.[index]?.price && (
+                            <p className="text-red-500 text-sm mt-1">{errors.sizes[index]?.price?.message}</p>
+                          )}
                         </div>
                         <Button
                           type="button"
@@ -416,11 +440,11 @@ async function handleFormSubmit(e: React.FormEvent) {
                 </Button>
               </CardHeader>
               <CardContent>
-                {extraIngredients.length === 0 ? (
+                {formValues.extraIngredients?.length === 0 ? (
                   <p className="text-gray-500 text-center py-8">No extra ingredients added yet</p>
                 ) : (
                   <div className="space-y-4">
-                    {extraIngredients.map((ingredient, index) => (
+                    {formValues.extraIngredients?.map((ingredient, index) => (
                       <div key={index} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                         <div className="flex-1">
                           <Input
@@ -428,6 +452,9 @@ async function handleFormSubmit(e: React.FormEvent) {
                             value={ingredient.name}
                             onChange={(e) => updateExtraIngredient(index, "name", e.target.value)}
                           />
+                          {errors.extraIngredients?.[index]?.name && (
+                            <p className="text-red-500 text-sm mt-1">{errors.extraIngredients[index]?.name?.message}</p>
+                          )}
                         </div>
                         <div className="w-32">
                           <div className="relative">
@@ -442,6 +469,9 @@ async function handleFormSubmit(e: React.FormEvent) {
                               className="pl-8"
                             />
                           </div>
+                          {errors.extraIngredients?.[index]?.price && (
+                            <p className="text-red-500 text-sm mt-1">{errors.extraIngredients[index]?.price?.message}</p>
+                          )}
                         </div>
                         <Button
                           type="button"
