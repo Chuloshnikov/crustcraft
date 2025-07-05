@@ -51,6 +51,8 @@ interface LocationsPropTypes {
   isMain: boolean;
 };
 
+// user types
+
 interface UserTypes {
   email: string;
   name: string;
@@ -83,6 +85,33 @@ interface CategoryTypes {
   _id?: string;
   name: string;
 }
+
+// Menu Items
+
+interface SizeOption {
+  name: string;
+  price: number;
+}
+
+interface ExtraIngredient {
+  name: string;
+  price: number;
+}
+
+
+export interface MenuItem {
+  _id: string;
+  image?: string;
+  name: string;
+  description: string;
+  basePrice: number;
+  category: string;
+  sizes?: SizeOption[];
+  extraIngredients?: ExtraIngredient[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 
 
 
