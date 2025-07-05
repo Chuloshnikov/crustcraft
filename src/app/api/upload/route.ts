@@ -41,8 +41,9 @@ export async function POST(req: Request) {
     }));
 
     const link = `https://${bucket}.s3.amazonaws.com/${newFileName}`;
-    return Response.json(link);
+    console.log(link);
+    return Response.json({link});
   }
 
-  return Response.json({ error: "No file uploaded or invalid file" });
+  return Response.json({ error: "No file uploaded or invalid file" }, { status: 400 });
 }

@@ -40,3 +40,31 @@ export const validateUserProfile = (data: UserProfileType): string[] => {
     return ["Unknown validation error"];
   }
 };
+
+
+// Menu Item Validation
+
+const SizeOptionSchema = z.object({
+  name: z.string().min(1, "Size name is required"),
+  price: z.number().min(0, "Price must be positive"),
+});
+
+
+const ExtraIngredientSchema = z.object({
+  name: z.string().min(1, "Ingredient name is required"),
+  price: z.number().min(0, "Price must be positive"),
+});
+
+
+export const MenuItemSchema = z.object({
+  image: z.string().url("Invalid image URL").nullable(),
+  name: z.string().min(1, "Name is required").max(100, "Name is too long"),
+  description: z.string().min(1, "Description is required").max(500, "Description is too long"),
+  basePrice: z.number().min(0.01, "Price must be at least 0.01"),
+  category: z.string().min(1, "Category is required"),
+  sizes: z.array(SizeOptionSchema).optional(),
+  extraIngredients: z.array(ExtraIngredientSchema).optional(),
+});
+
+
+export type MenuItemFormData = z.infer<typeof MenuItemSchema>;
