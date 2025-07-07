@@ -21,6 +21,7 @@ const MenuItemsTab = () => {
         await deleteMenuItem(id);
         toast.success(`"${name}" deleted successfully`);
       } catch (err) {
+        console.error('Failed to delete menu item:', err);
         toast.error('Failed to delete menu item');
       }
     }

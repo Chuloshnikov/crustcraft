@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/authOptions"; // путь к настройкам next-auth
-import { UserInfo } from "@/models/UserInfo";           // путь к mongoose модели User
+import { authOptions } from "../auth/authOptions"; 
+import { UserInfo } from "@/models/UserInfo";   
 
 export async function isAdmin(): Promise<boolean> {
   const session = await getServerSession(authOptions);
