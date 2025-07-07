@@ -1,10 +1,60 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TabsContent } from '@/components/ui/tabs';
-import { Users } from 'lucide-react';
+import { useAllUsers } from '@/lib/hooks/useGetAllUsers';
+import { Loader2, Users } from 'lucide-react';
 import React from 'react'
+import { toast } from 'sonner';
+import UserCard from './UserCard';
 
 const UsersTab = () => {
+   const {
+      allUsers,
+      loading,
+      error,
+      deleteUser,
+    } = useAllUsers();
+    console.log('All Users:', allUsers);
+
+    const handleDelete = async (id: string, firstName: string, lastName: string) => {
+      if (confirm(`Are you sure you want to delete "${firstName} ${lastName}"?`)) {
+        try {
+          await deleteUser(id);
+          toast.success(`"${firstName} ${lastName}" deleted successfully`);
+        } catch (err) {
+          console.error('Failed to delete menu item:', err);
+          toast.error('Failed to delete menu item');
+        }
+      }
+    };
+
+   if (loading) {
+    return (
+      <TabsContent value="menu-items">
+        <Card className="shadow-lg border-0">
+          <CardContent className="flex justify-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+          </CardContent>
+        </Card>
+      </TabsContent>
+    );
+  }
+
+
+  if (error) {
+    return (
+      <TabsContent value="menu-items">
+        <Card className="shadow-lg border-0">
+          <CardContent className="text-center py-8 text-red-500">
+            Error loading menu items: {error}
+          </CardContent>
+        </Card>
+      </TabsContent>
+    );
+  }
+
+
+
   return (
     <TabsContent value="users">
             <Card className="shadow-lg border-0">
@@ -18,52 +68,19 @@ const UsersTab = () => {
                   <div className="space-y-4">
                     {/* Users List */}
                     <div className="space-y-3">
-                      <div className="border border-gray-200 rounded-lg p-4 flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-semibold">
-                            DJ
-                          </div>
-                          <div>
-                            <h3 className="font-semibold">David Johnson</h3>
-                            <p className="text-sm text-gray-600">david.johnson@email.com • Admin</p>
-                          </div>
+                     {allUsers.length === 0 ? (
+                        <div className="text-center py-8 text-gray-500">
+                          No menu items found
                         </div>
-                        <div className="flex gap-2">
-                          <Button size="sm" variant="outline">
-                            Edit
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="text-red-600 hover:text-red-700 bg-transparent"
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      </div>
-                      <div className="border border-gray-200 rounded-lg p-4 flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 bg-gray-500 rounded-full flex items-center justify-center text-white font-semibold">
-                            JS
-                          </div>
-                          <div>
-                            <h3 className="font-semibold">Jane Smith</h3>
-                            <p className="text-sm text-gray-600">jane.smith@email.com • Customer</p>
-                          </div>
-                        </div>
-                        <div className="flex gap-2">
-                          <Button size="sm" variant="outline">
-                            Edit
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="text-red-600 hover:text-red-700 bg-transparent"
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      </div>
+                      ) : (
+                        allUsers.map((item) => (
+                          <UserCard 
+                            key={item._id} 
+                            item={item} 
+                            onDelete={handleDelete} 
+                          />
+                        ))
+                      )}
                     </div>
                   </div>
                 </CardContent>

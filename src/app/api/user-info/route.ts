@@ -7,6 +7,14 @@ import { getServerSession } from "next-auth";
 
 export async function POST(req: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    const userEntry = session?.user?.email;
+
+    if (!userEntry) {
+      return Response.json({ error: 'You need to be authenticated' }, { status: 401 });
+    }
+
+
     await connectToDB();
 
     const {
@@ -20,13 +28,7 @@ export async function POST(req: Request) {
       admin
     } = await req.json();
 
-    const session = await getServerSession(authOptions);
-    const userEntry = session?.user?.email;
-
-    if (!userEntry) {
-      return Response.json({ error: 'You need to be authenticated' }, { status: 401 });
-    }
-
+    
     const existingUser = await UserInfo.findOne({ email });
 
     if (!existingUser) {
@@ -61,9 +63,8 @@ export async function GET() {
     await connectToDB();
     const session = await getServerSession(authOptions);
     const email = session?.user?.email;
-    if (!email) {
-        return Response.json({ error: 'You need to be authenticated' }, { status: 400 });
-    }
+    
+
     return Response.json(
         await UserInfo.findOne({email})
     )

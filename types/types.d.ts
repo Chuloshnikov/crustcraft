@@ -69,6 +69,7 @@ interface UserProfileTypes {
 };
 
 interface UserInfoProps {
+  _id?: string;
   email: string;
   firstName?: string;
   lastName?: string;
