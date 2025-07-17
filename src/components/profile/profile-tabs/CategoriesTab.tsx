@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import CategoryItem from './CategoryItem';
 import { CategoryTypes } from '../../../../types/types';
 
-const CategoriesTab = () => {
+const CategoriesTab = ({isAdmin}: {isAdmin: boolean}) => {
   const [categoryName, setCategoryName] = useState<string>('');
   const [categories, setCategories] = useState<CategoryTypes[]>([]);
   const [editCategory, setEditCategory] = useState<CategoryTypes | null>(null);
@@ -31,7 +31,10 @@ const CategoriesTab = () => {
   async function handleCategorySubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
 
-    const creationPromise = new Promise<void>(async (resolve, reject) => {
+    if (!isAdmin) {
+      toast("Not an Admin");
+    } else {
+      const creationPromise = new Promise<void>(async (resolve, reject) => {
       const data: CategoryTypes = { name: categoryName };
 
       if (editCategory) {
@@ -58,13 +61,15 @@ const CategoriesTab = () => {
       }
     });
 
-    await toast.promise(creationPromise, {
+    toast.promise(creationPromise, {
       loading: editCategory
         ? 'Updating category...'
         : 'Creating your new category...',
       success: editCategory ? 'Category updated!' : 'Category created!',
       error: 'Error!',
     });
+    }
+
   }
 
   async function handleDeleteClick(_id: string | undefined): Promise<void> {

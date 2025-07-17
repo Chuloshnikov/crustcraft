@@ -166,7 +166,7 @@ export function ProfileContent() {
           <FavoritesTab/>
 
           {/* Categories Tab */}
-          {userInfo?.admin && (<CategoriesTab/>)}
+          {userInfo?.admin && (<CategoriesTab isAdmin={userInfo?.admin}/>)}
 
           {/* Menu Items Tab */}
           {userInfo?.admin && (<MenuItemsTab/>)}
