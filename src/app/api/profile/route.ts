@@ -30,6 +30,7 @@ export async function POST(req: Request) {
     }
   }
 
+//get user bio
 export async function GET() {
     await connectToDB();
     const session = await getServerSession(authOptions);
@@ -41,3 +42,4 @@ export async function GET() {
         await UserInfo.findOne({email})
     )
 }
+

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -18,106 +18,85 @@ import {
   Phone,
   MapPin,
   Calendar,
-  Camera,
   Shield,
   Trash2,
+  Camera,
 } from "lucide-react"
 import Link from "next/link"
+import EditableImage from "../EditableImage"
+import { UserInfoProps } from "../../../types/types"
+import { UserProfileType, validateUserProfile } from "@/lib/validation"
 
-interface EditUserFormProps {
-  userId: string
-}
 
-export function EditUserForm({ userId }: EditUserFormProps) {
+
+export function EditUserForm({ userInfo }: { userInfo: UserInfoProps }) {
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [error, setError] = useState("")
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
-  // Form state based on MongoDB schema
-  const [email, setEmail] = useState("")
-  const [firstName, setFirstName] = useState("")
-  const [lastName, setLastName] = useState("")
-  const [avatarUrl, setAvatarUrl] = useState("")
-  const [dateOfBirth, setDateOfBirth] = useState("")
-  const [address, setAddress] = useState("")
-  const [phone, setPhone] = useState("")
-  const [admin, setAdmin] = useState(false)
+  const [email, setEmail] = useState(userInfo.email || "");
+  const [firstName, setFirstName] = useState(userInfo.firstName || "");
+  const [lastName, setLastName] = useState(userInfo.lastName || "");
+  const [avatarUrl, setAvatarUrl] = useState(userInfo.avatarUrl || "")
+  const [dateOfBirth, setDateOfBirth] = useState(userInfo.dateOfBirth || "1990-05-15")
+  const [address, setAddress] = useState(userInfo.address || "")
+  const [phone, setPhone] = useState(userInfo.phone || "")
+  const [admin, setAdmin] = useState(userInfo.admin || false);
 
   // Additional fields for address breakdown
   const [streetAddress, setStreetAddress] = useState("")
   const [postalCode, setPostalCode] = useState("")
   const [city, setCity] = useState("")
 
-  // Load existing user data
-  useEffect(() => {
-    const loadUserData = async () => {
-      try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-
-        // Mock data for the user
-        setEmail("david.johnson@email.com")
-        setFirstName("David")
-        setLastName("Johnson")
-        setAvatarUrl("/placeholder.svg?height=96&width=96")
-        setDateOfBirth("1990-05-15")
-        setAddress("123 Main Street, Downtown, City 12345")
-        setPhone("+1 (555) 123-4567")
-        setAdmin(true)
-
-        // Parse address for separate fields
-        setStreetAddress("123 Main Street")
-        setPostalCode("12345")
-        setCity("Downtown")
-      } catch (err) {
-        setError("Failed to load user data")
-        console.log(err);
-      }
-    }
-
-    loadUserData()
-  }, [userId])
-
-  const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        setAvatarUrl(e.target?.result as string)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setError("")
+    setError("");
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
-      // Basic validation
-      if (!email || !firstName || !lastName) {
-        throw new Error("Please fill in all required fields")
-      }
-
-      if (!email.includes("@")) {
-        throw new Error("Please enter a valid email address")
-      }
-
-      // Combine address fields
+       // Combine address fields
       const fullAddress = `${streetAddress}, ${city} ${postalCode}`.trim()
-      setAddress(fullAddress)
+      setAddress(fullAddress);
 
+      const payload: UserProfileType = {
+      email,
+      firstName,
+      lastName,
+      avatarUrl,
+      phone,
+      address,
+      dateOfBirth
+      };
+
+      const validationErrors = validateUserProfile(payload);
+     
+      if (validationErrors.length > 0) {
+        alert(`Validation error:\n${validationErrors.join("\n")}`);
+        return;
+      }
+
+      const res = await fetch("/api/user-info", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+  
+        if (!res.ok) {
+          const { error } = await res.json();
+          alert(`Error: ${error}`);
+          return;
+        }
+  
       // Simulate successful save
       setIsSuccess(true)
       setTimeout(() => {
         // Redirect to users list
-        window.location.href = "/admin/users"
+        window.location.href = "/profile"
       }, 1500)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to update user")
@@ -125,6 +104,7 @@ export function EditUserForm({ userId }: EditUserFormProps) {
       setIsLoading(false)
     }
   }
+
 
   const handleDelete = async () => {
     setIsDeleting(true)
@@ -211,48 +191,37 @@ export function EditUserForm({ userId }: EditUserFormProps) {
             <div className="grid lg:grid-cols-3 gap-8">
               {/* Avatar Section */}
               <div className="lg:col-span-1">
-                <Card className="shadow-lg border-0">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Camera className="h-5 w-5 text-orange-600" />
-                      Profile Picture
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-center">
-                    <div className="space-y-4">
-                      <div className="relative inline-block">
-                        <Avatar className="w-32 h-32 border-4 border-white shadow-lg">
-                          <AvatarImage src={avatarUrl || "/placeholder.svg"} alt="User avatar" />
-                          <AvatarFallback className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-500 text-white">
-                            {firstName[0]}
-                            {lastName[0]}
+                  <Card className="shadow-lg border-0">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Camera className="h-5 w-5 text-orange-600" />
+                        Profile Picture
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-center">
+                       <div className="space-y-3">
+                          <div className="relative w-24 h-24">
+                        <Avatar className="absolute w-full h-full border-4 border-white shadow-lg rounded-full overflow-hidden">
+                          {avatarUrl && (<AvatarImage 
+                            src={avatarUrl} 
+                            alt="Profile"
+                            className="w-full h-full object-cover rounded-full"/>
+                          )}
+                          {!avatarUrl && 
+                          (<AvatarFallback className="text-2xl font-bold bg-white text-orange-600 flex items-center justify-center w-full h-full rounded-full">
+                            {firstName && firstName[0]}
+                            {lastName && lastName[0]}
                           </AvatarFallback>
+                          )}              
                         </Avatar>
-                        <div className="absolute -bottom-2 -right-2">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleAvatarUpload}
-                            className="hidden"
-                            id="avatar-upload"
-                          />
-                          <label htmlFor="avatar-upload">
-                            <Button
-                              type="button"
-                              size="sm"
-                              className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-full w-10 h-10 p-0 cursor-pointer"
-                            >
-                              <Camera className="h-4 w-4" />
-                            </Button>
-                          </label>
+                        <EditableImage setLink={setAvatarUrl}/>
                         </div>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-600">Click the camera icon to change avatar</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                          <div>
+                            <p className="text-sm text-gray-600">Click the camera icon to change avatar</p>
+                          </div>
+                       </div>
+                    </CardContent>
+                  </Card>
               </div>
 
               {/* Basic Information */}
@@ -450,7 +419,7 @@ export function EditUserForm({ userId }: EditUserFormProps) {
 
               {/* Save/Cancel Buttons */}
               <div className="flex gap-4">
-                <Link href="/admin/users">
+                <Link href="/profile">
                   <Button
                     type="button"
                     variant="outline"
