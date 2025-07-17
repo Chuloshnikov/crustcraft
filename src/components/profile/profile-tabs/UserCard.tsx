@@ -1,6 +1,6 @@
-import React from 'react'
 import { UserInfoProps } from '../../../../types/types';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 interface UserCardProps {
   item: UserInfoProps;
@@ -19,19 +19,21 @@ const UserCard = ({ item, onDelete }: UserCardProps) => {
                     <p className="text-sm text-gray-600">{item.email} • {item.admin ? 'Admin' : 'Customer'}</p>
                 </div>
             </div>
-                        <div className="flex gap-2">
-            <Button size="sm" variant="outline">
-                Edit
-            </Button>
-            <Button
-                size="sm"
-                variant="outline"
-                className="text-red-600 hover:text-red-700 bg-transparent"
-                onClick={() => onDelete(item._id, item.firstName, item.lastName)}
-                >
-                Delete
-            </Button>
-        </div>
+            <div className="flex gap-2">
+                <Link href={`/users/edit/${item._id}`}>
+                    <Button className='cursor-pointer' size="sm" variant="outline">
+                        Edit
+                    </Button>
+                </Link>
+                <Button
+                    size="sm"
+                    variant="outline"
+                    className="cursor-pointer text-red-600 hover:text-red-700 bg-transparent"
+                    onClick={() => onDelete(item._id!, item.firstName!, item.lastName!)}
+                    >
+                    Delete
+                </Button>
+            </div>
     </div>
   )
 }   

@@ -1,11 +1,19 @@
 "use server"
 import { MenuItemForm } from "@/components/profile/menu-items/MenuItemForm";
+import { isAdmin } from "@/lib/server/isAdmin";
 import { Category } from "@/models/Category";
 import { MenuItem } from "@/models/MenuItem";
+import { redirect } from "next/navigation";
 
 
 
 export default async function EditItem({ params }: { params: { id: string } }) {
+  const admin = await isAdmin();
+  
+  if (!admin) {
+    redirect('/profile');
+  }
+    
 
   const { id } = params;
 

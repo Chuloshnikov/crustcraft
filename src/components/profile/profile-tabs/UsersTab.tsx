@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TabsContent } from '@/components/ui/tabs';
 import { useAllUsers } from '@/lib/hooks/useGetAllUsers';
@@ -7,7 +6,7 @@ import React from 'react'
 import { toast } from 'sonner';
 import UserCard from './UserCard';
 
-const UsersTab = () => {
+const UsersTab = ({isAdmin}: {isAdmin: boolean}) => {
    const {
       allUsers,
       loading,
@@ -17,13 +16,18 @@ const UsersTab = () => {
     console.log('All Users:', allUsers);
 
     const handleDelete = async (id: string, firstName: string, lastName: string) => {
-      if (confirm(`Are you sure you want to delete "${firstName} ${lastName}"?`)) {
-        try {
-          await deleteUser(id);
-          toast.success(`"${firstName} ${lastName}" deleted successfully`);
-        } catch (err) {
-          console.error('Failed to delete menu item:', err);
-          toast.error('Failed to delete menu item');
+      if (!isAdmin) {
+        toast("Not an Admin");
+        return;
+      } else {
+          if (confirm(`Are you sure you want to delete "${firstName} ${lastName}"?`)) {
+          try {
+            await deleteUser(id);
+            toast.success(`"${firstName} ${lastName}" deleted successfully`);
+          } catch (err) {
+            console.error('Failed to delete menu item:', err);
+            toast.error('Failed to delete menu item');
+          }
         }
       }
     };

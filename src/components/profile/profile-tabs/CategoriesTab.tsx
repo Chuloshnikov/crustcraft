@@ -33,6 +33,7 @@ const CategoriesTab = ({isAdmin}: {isAdmin: boolean}) => {
 
     if (!isAdmin) {
       toast("Not an Admin");
+      return;
     } else {
       const creationPromise = new Promise<void>(async (resolve, reject) => {
       const data: CategoryTypes = { name: categoryName };
@@ -75,6 +76,10 @@ const CategoriesTab = ({isAdmin}: {isAdmin: boolean}) => {
   async function handleDeleteClick(_id: string | undefined): Promise<void> {
     if (!_id) return;
 
+    if (!isAdmin) {
+      toast("Not an Admin");
+      return;
+    } else {
     const promise = new Promise<void>(async (resolve, reject) => {
       try {
         const response = await fetch('/api/categories?_id=' + _id, {
@@ -92,11 +97,13 @@ const CategoriesTab = ({isAdmin}: {isAdmin: boolean}) => {
       }
     });
 
-    await toast.promise(promise, {
+    toast.promise(promise, {
       loading: 'Deleting...',
       success: 'Deleted',
       error: 'Error',
     });
+  }
+
   }
 
   return (
