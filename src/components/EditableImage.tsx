@@ -52,6 +52,7 @@ const EditableImage = ({ setLink }: { setLink: (link: string) => void }) => {
             />
             <Button
                 size="sm"
+                type="button"
                 onClick={handleButtonClick}
                 className="cursor-pointer bg-white text-orange-600 hover:bg-orange-50 rounded-full w-8 h-8 p-0"
             >
