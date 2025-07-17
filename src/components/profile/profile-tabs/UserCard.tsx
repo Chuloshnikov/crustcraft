@@ -1,4 +1,3 @@
-import React from 'react'
 import { UserInfoProps } from '../../../../types/types';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -22,7 +21,7 @@ const UserCard = ({ item, onDelete }: UserCardProps) => {
             </div>
             <div className="flex gap-2">
                 <Link href={`/users/edit/${item._id}`}>
-                    <Button size="sm" variant="outline">
+                    <Button className='cursor-pointer' size="sm" variant="outline">
                         Edit
                     </Button>
                 </Link>
@@ -30,7 +29,7 @@ const UserCard = ({ item, onDelete }: UserCardProps) => {
                     size="sm"
                     variant="outline"
                     className="cursor-pointer text-red-600 hover:text-red-700 bg-transparent"
-                    onClick={() => onDelete(item._id, item.firstName, item.lastName)}
+                    onClick={() => onDelete(item._id!, item.firstName!, item.lastName!)}
                     >
                     Delete
                 </Button>
