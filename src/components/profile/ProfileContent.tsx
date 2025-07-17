@@ -169,10 +169,10 @@ export function ProfileContent() {
           {userInfo?.admin && (<CategoriesTab isAdmin={userInfo?.admin}/>)}
 
           {/* Menu Items Tab */}
-          {userInfo?.admin && (<MenuItemsTab/>)}
+          {userInfo?.admin && (<MenuItemsTab isAdmin={userInfo?.admin}/>)}
 
            {/* Users Tab */}
-           {userInfo?.admin && (<UsersTab/>)}
+           {userInfo?.admin && (<UsersTab isAdmin={userInfo?.admin}/>)}
 
           {/* Payments Tab */}
           <PaymentsTab/>

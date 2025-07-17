@@ -7,7 +7,7 @@ import { useMenuItems } from '@/lib/hooks/useMenuItems';
 import MenuItemCard from './MenuItemCard';
 import { toast } from 'sonner';
 
-const MenuItemsTab = () => {
+const MenuItemsTab = ({isAdmin}: {isAdmin: boolean}) => {
   const {
     menuItems,
     loading,
@@ -16,13 +16,18 @@ const MenuItemsTab = () => {
   } = useMenuItems();
 
   const handleDelete = async (id: string, name: string) => {
-    if (confirm(`Are you sure you want to delete "${name}"?`)) {
-      try {
-        await deleteMenuItem(id);
-        toast.success(`"${name}" deleted successfully`);
-      } catch (err) {
-        console.error('Failed to delete menu item:', err);
-        toast.error('Failed to delete menu item');
+    if (!isAdmin) {
+          toast("Not an Admin");
+          return;
+    } else {
+      if (confirm(`Are you sure you want to delete "${name}"?`)) {
+        try {
+          await deleteMenuItem(id);
+          toast.success(`"${name}" deleted successfully`);
+        } catch (err) {
+          console.error('Failed to delete menu item:', err);
+          toast.error('Failed to delete menu item');
+        }
       }
     }
   };
