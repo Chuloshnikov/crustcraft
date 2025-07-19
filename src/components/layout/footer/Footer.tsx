@@ -28,27 +28,27 @@ const Footer = () => {
             <h3 className="font-bold text-lg mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
+                <a href={"/"} className="text-gray-300 hover:text-orange-500 transition-colors">
                   Home
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
+                <a href={"/menu"} className="text-gray-300 hover:text-orange-500 transition-colors">
                   Menu
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
+                <a href={"/about"} className="text-gray-300 hover:text-orange-500 transition-colors">
                   About Us
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
+                <a href={"/contact"} className="text-gray-300 hover:text-orange-500 transition-colors">
                   Contact
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
+                <a href={"/"} className="text-gray-300 hover:text-orange-500 transition-colors">
                   Careers
                 </a>
               </li>
@@ -61,12 +61,12 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
-                  Classic Pizzas
+                  Pizzas
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
-                  Specialty Pizzas
+                  Pasta
                 </a>
               </li>
               <li>

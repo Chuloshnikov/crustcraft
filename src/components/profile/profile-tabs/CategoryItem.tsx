@@ -20,6 +20,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
       <span className="text-gray-700">{category.name}</span>
       <div className="flex gap-2">
         <Button 
+        className="cursor-pointer"
           onClick={() => {
             setEditCategory(category);
             setCategoryName(category.name);
@@ -33,7 +34,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
           onClick={() => handleDeleteClick(category._id)}
           size="sm"
           variant="outline"
-          className="text-red-600 hover:text-red-700 bg-transparent"
+          className="cursor-pointer text-red-600 hover:text-red-700 bg-transparent"
         >
           Delete
         </Button>
