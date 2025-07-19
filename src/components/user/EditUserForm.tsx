@@ -61,22 +61,27 @@ export function EditUserForm({ userInfo }: { userInfo: UserInfoProps }) {
       const fullAddress = `${streetAddress}, ${city} ${postalCode}`.trim()
       setAddress(fullAddress);
 
-      const payload: UserProfileType = {
+      const validationData: UserProfileType = {
       email,
       firstName,
       lastName,
       avatarUrl,
       phone,
-      address,
+      address: fullAddress,
       dateOfBirth
       };
 
-      const validationErrors = validateUserProfile(payload);
+      const validationErrors = validateUserProfile(validationData);
      
       if (validationErrors.length > 0) {
         alert(`Validation error:\n${validationErrors.join("\n")}`);
         return;
-      }
+      };
+
+      const payload = {
+            _id: userInfo._id,
+            ...validationData
+        };
 
       const res = await fetch("/api/user-info", {
           method: "PUT",
@@ -87,9 +92,9 @@ export function EditUserForm({ userInfo }: { userInfo: UserInfoProps }) {
         });
   
         if (!res.ok) {
-          const { error } = await res.json();
-          alert(`Error: ${error}`);
-          return;
+            const errorData = await res.json();
+            alert(`Error: ${errorData.error || errorData.message}`);
+            return;
         }
   
       // Simulate successful save
@@ -160,9 +165,9 @@ export function EditUserForm({ userInfo }: { userInfo: UserInfoProps }) {
         <div className="max-w-4xl mx-auto mb-8">
           <div className="flex items-center gap-4 mb-6">
             <Link href="/profile">
-              <Button variant="outline" className="border-orange-200 text-orange-600 hover:bg-orange-50 bg-transparent">
+              <Button variant="outline" className="cursor-pointer border-orange-200 text-orange-600 hover:bg-orange-50 bg-transparent">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Users
+                  Back to dashboard
               </Button>
             </Link>
           </div>
@@ -385,7 +390,7 @@ export function EditUserForm({ userInfo }: { userInfo: UserInfoProps }) {
             </Card>
 
             {/* Action Buttons */}
-            <div className="flex justify-between">
+            <div className="flex flex-col gap-3 md:flex-row justify-between">
               {/* Delete Button */}
               <div>
                 {!showDeleteConfirm ? (

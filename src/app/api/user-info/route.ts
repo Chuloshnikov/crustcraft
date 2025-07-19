@@ -64,13 +64,25 @@ export async function PUT(req: Request) {
     try {
         await connectToDB();
         const admin = await isAdmin();
-        if (admin) {
-            const {_id, ...data} = await req.json();
-            await UserInfo.findByIdAndUpdate(_id, data);
-            return Response.json({ message: 'User info updated' }, { status: 200 });
-        } else {
-             return Response.json({ message: 'Not an Admin' }, { status: 401 });
+        
+        if (!admin) {
+            return Response.json({ message: 'Not an Admin' }, { status: 401 });
         }
+
+        const {_id, ...data} = await req.json();
+        
+        const user = await UserInfo.findById(_id);
+        if (!user) {
+            return Response.json({ error: 'User not found' }, { status: 404 });
+        }
+
+        const updatedUser = await UserInfo.findByIdAndUpdate(_id, data, { new: true });
+        
+        return Response.json({ 
+            message: 'User info updated',
+            user: updatedUser 
+        }, { status: 200 });
+
     } catch (error) {
         console.error('Error:', error);
         return Response.json({ error: 'Internal server error' }, { status: 500 });
