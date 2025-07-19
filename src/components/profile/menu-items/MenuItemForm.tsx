@@ -372,7 +372,7 @@ export function MenuItemForm({
                   <Tag className="h-5 w-5 text-orange-600" />
                   Size Options
                 </CardTitle>
-                <Button type="button" onClick={addSize} variant="outline" size="sm">
+                <Button className="cursor-pointer" type="button" onClick={addSize} variant="outline" size="sm">
                   <Plus className="h-4 w-4 mr-2" />
                   Add Size
                 </Button>
@@ -416,7 +416,7 @@ export function MenuItemForm({
                           onClick={() => removeSize(index)}
                           variant="outline"
                           size="sm"
-                          className="text-red-600 hover:text-red-700"
+                          className="cursor-pointer text-red-600 hover:text-red-700"
                         >
                           <Minus className="h-4 w-4" />
                         </Button>
@@ -434,7 +434,7 @@ export function MenuItemForm({
                   <Plus className="h-5 w-5 text-orange-600" />
                   Extra Ingredients
                 </CardTitle>
-                <Button type="button" onClick={addExtraIngredient} variant="outline" size="sm">
+                <Button className="cursor-pointer" type="button" onClick={addExtraIngredient} variant="outline" size="sm">
                   <Plus className="h-4 w-4 mr-2" />
                   Add Ingredient
                 </Button>
@@ -478,7 +478,7 @@ export function MenuItemForm({
                           onClick={() => removeExtraIngredient(index)}
                           variant="outline"
                           size="sm"
-                          className="text-red-600 hover:text-red-700"
+                          className="cursor-pointer text-red-600 hover:text-red-700"
                         >
                           <Minus className="h-4 w-4" />
                         </Button>
@@ -500,7 +500,7 @@ export function MenuItemForm({
                         type="button"
                         variant="outline"
                         onClick={() => setShowDeleteConfirm(true)}
-                        className="border-red-200 text-red-600 hover:bg-red-50"
+                        className="cursor-pointer border-red-200 text-red-600 hover:bg-red-50"
                       >
                         <Trash2 className="h-4 w-4 mr-2" />
                         Delete Item
@@ -532,7 +532,7 @@ export function MenuItemForm({
                   <Button
                     type="button"
                     variant="outline"
-                    className="border-gray-200 text-gray-600 hover:bg-gray-50 bg-transparent"
+                    className="cursor-pointer border-gray-200 text-gray-600 hover:bg-gray-50 bg-transparent"
                   >
                     Cancel
                   </Button>
@@ -540,7 +540,7 @@ export function MenuItemForm({
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-8"
+                  className="cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-8"
                 >
                   {isLoading ? (
                     <div className="flex items-center space-x-2">

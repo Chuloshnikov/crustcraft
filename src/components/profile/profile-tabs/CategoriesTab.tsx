@@ -129,12 +129,13 @@ const CategoriesTab = ({isAdmin}: {isAdmin: boolean}) => {
                 />
                 <Button
                   type="submit"
-                  className="bg-red-500 hover:bg-red-600 text-white px-6"
+                  className="cursor-pointer bg-red-500 hover:bg-red-600 text-white px-6"
                 >
                   {editCategory ? 'Update' : 'Create'}
                 </Button>
                 {editCategory && (
                   <Button
+                  className="cursor-pointer"
                     type="button"
                     variant="outline"
                     onClick={() => {
