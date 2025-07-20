@@ -1,11 +1,13 @@
+import { CartContext } from '@/app/providers';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { IMenuItem } from '@/models/MenuItem';
 import { Heart, ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
-import React from 'react'
+import React, { useContext } from 'react'
 
 const BestSellersCard = ({product}: {product: IMenuItem}) => {
+  const {addToCart} = useContext(CartContext);
   return (
      <Card
               key={product._id}
@@ -34,13 +36,14 @@ const BestSellersCard = ({product}: {product: IMenuItem}) => {
                 <p className="text-gray-600 text-sm mb-4">{product.description.slice(0, 80)}.....</p>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-orange-600">{product.price}</span>
+                  <span className="text-2xl font-bold text-orange-600">{product.basePrice}$</span>
                     <Button
+                    onClick={() => addToCart(product)}
                     size="sm"
                     className="cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
-                  >
-                    <ShoppingCart className="h-4 w-4 mr-1" />
-                    Add
+                    >
+                      <ShoppingCart className="h-4 w-4 mr-1" />
+                      Add
                   </Button>
                 </div>
               </CardContent>
