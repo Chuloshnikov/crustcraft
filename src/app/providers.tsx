@@ -10,9 +10,9 @@ type Props = {
 
 const Providers = ({ children }: Props) => {
   return (
-  <SessionProvider>
-    <GmailProfileWatcher />
-      {children}
+    <SessionProvider>
+      <GmailProfileWatcher />
+        {children}
     </SessionProvider>
     );
 }

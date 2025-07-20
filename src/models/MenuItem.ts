@@ -6,9 +6,11 @@ export interface IExtraPrice {
 }
 
 export interface IMenuItem extends Document {
+  _id: string;
   image: string;
   name: string;
   description: string;
+  popular?: boolean;
   category: Types.ObjectId;
   basePrice: number;
   sizes: IExtraPrice[];

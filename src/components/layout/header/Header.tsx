@@ -1,7 +1,7 @@
 "use client"
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
-import { Menu, X, Pizza, User, LogOut } from "lucide-react";
+import { Menu, X, Pizza, User, LogOut, ShoppingBag, Heart } from "lucide-react";
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 
@@ -24,7 +24,7 @@ const Header = () => {
             <div className="bg-gradient-to-r from-orange-500 to-red-500 p-2 rounded-lg">
               <Pizza className="h-6 w-6 text-white" />
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+            <span className=" text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
               CRUSTCRAFT
             </span>
           </Link>
@@ -44,18 +44,29 @@ const Header = () => {
               Contact
             </a>
           </nav>
-
           {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center space-x-4">
                 {status === 'loading' ? null : status === 'authenticated' ? (
                   <div className="flex gap-2 items-center">
+                        <Link
+                        className="relative text-gray-700 hover:text-orange-600"
+                        href={"/cart"}
+                        >
+                            <ShoppingBag/>
+                            <span className="absolute top-0 -left-1 
+                            bg-gray-700 text-zinc-200 w-4 h-4 rounded-full 
+                            text-xs flex items-center justify-center"
+                            >
+                              0
+                            </span>
+                        </Link>
                     <Link href="/profile">
                       <Button
                         variant="ghost"
                         className="cursor-pointer text-gray-700 hover:text-orange-600 flex items-center gap-2"
                       >
                         <User className="h-5 w-5 text-orange-500" />
-                        <span className="hidden md:inline-block whitespace-nowrap">
+                        <span className="hidden lg:inline-block whitespace-nowrap">
                           Hello, {userName}
                         </span>
                       </Button>
@@ -106,8 +117,23 @@ const Header = () => {
                 Contact
               </a>
               <div className="flex flex-col space-y-2 pt-4">
+                   
                 {status === 'loading' ? null : status === 'authenticated' ? (
                   <>
+                    <Button
+                    variant="ghost"
+                    className="w-full border justify-start text-gray-700 hover:text-orange-600 flex items-center gap-2"
+                    >
+                      <ShoppingBag/>
+                      <span className="whitespace-nowrap">
+                          Basket
+                      </span>
+                       <span className="bg-gray-700 text-zinc-200 w-4 h-4 rounded-full 
+                          text-xs flex items-center justify-center"
+                          >
+                            0
+                          </span>
+                    </Button>
                     <Link href="/profile" className="w-full border rounded-md">
                       <Button
                         variant="ghost"
