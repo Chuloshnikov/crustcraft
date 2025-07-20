@@ -1,9 +1,10 @@
 "use client"
 import { Button } from '@/components/ui/button';
-import React, { useState } from 'react';
-import { Menu, X, Pizza, User, LogOut, ShoppingBag, Heart } from "lucide-react";
+import React, { useContext, useState } from 'react';
+import { Menu, X, Pizza, User, LogOut, ShoppingBag } from "lucide-react";
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
+import { CartContext } from '@/app/providers';
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,6 +15,7 @@ const Header = () => {
     if (userName && userName.includes(" ")) {
         userName = userName.split(' ')[0];
     }
+    const {cartProducts} = useContext(CartContext)
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-orange-100">
@@ -48,7 +50,8 @@ const Header = () => {
         <div className="hidden md:flex items-center space-x-4">
                 {status === 'loading' ? null : status === 'authenticated' ? (
                   <div className="flex gap-2 items-center">
-                        <Link
+                    {cartProducts?.length > 0 && (
+                      <Link
                         className="relative text-gray-700 hover:text-orange-600"
                         href={"/cart"}
                         >
@@ -57,9 +60,10 @@ const Header = () => {
                             bg-gray-700 text-zinc-200 w-4 h-4 rounded-full 
                             text-xs flex items-center justify-center"
                             >
-                              0
+                              {cartProducts?.length}
                             </span>
-                        </Link>
+                      </Link>
+                    )}
                     <Link href="/profile">
                       <Button
                         variant="ghost"
@@ -120,6 +124,7 @@ const Header = () => {
                    
                 {status === 'loading' ? null : status === 'authenticated' ? (
                   <>
+                  {cartProducts?.length > 0 && (
                     <Button
                     variant="ghost"
                     className="w-full border justify-start text-gray-700 hover:text-orange-600 flex items-center gap-2"
@@ -131,9 +136,11 @@ const Header = () => {
                        <span className="bg-gray-700 text-zinc-200 w-4 h-4 rounded-full 
                           text-xs flex items-center justify-center"
                           >
-                            0
+                            {cartProducts?.length}
                           </span>
                     </Button>
+                  )}
+                    
                     <Link href="/profile" className="w-full border rounded-md">
                       <Button
                         variant="ghost"
