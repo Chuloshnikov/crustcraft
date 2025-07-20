@@ -1,49 +1,36 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import React from 'react';
 import BestSellersCard from './BestSellersCard';
 import Link from 'next/link';
+import { getProducts } from '@/helpers';
+import { IMenuItem } from '@/models/MenuItem';
 
-const pizzas = [
-  {
-    id: 1,
-    name: "Margherita Classic",
-    description: "Fresh tomatoes, mozzarella, basil",
-    price: "$18.99",
-    rating: 4.8,
-    image: "/placeholder.svg?height=300&width=300",
-    popular: true,
-  },
-  {
-    id: 2,
-    name: "Pepperoni Supreme",
-    description: "Pepperoni, cheese, tomato sauce",
-    price: "$22.99",
-    rating: 4.9,
-    image: "/placeholder.svg?height=300&width=300",
-    popular: false,
-  },
-  {
-    id: 3,
-    name: "Veggie Delight",
-    description: "Bell peppers, mushrooms, olives",
-    price: "$20.99",
-    rating: 4.7,
-    image: "/placeholder.svg?height=300&width=300",
-    popular: false,
-  },
-  {
-    id: 4,
-    name: "Meat Lovers",
-    description: "Pepperoni, sausage, ham, bacon",
-    price: "$26.99",
-    rating: 4.9,
-    image: "/placeholder.svg?height=300&width=300",
-    popular: true,
-  },
-]
 
+const getRandomItems = (arr: IMenuItem[], count: number) => {
+  const shuffled = [...arr].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+};
 
 const BestSellersSection = () => {
+  const [products, setProducts] = useState<IMenuItem[]>([]);
+  console.log(products);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const allProducts = await getProducts();
+        const randomFour = getRandomItems(allProducts, 4);
+        setProducts(randomFour);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <section className="py-20 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -57,21 +44,25 @@ const BestSellersSection = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {pizzas.map((pizza, index) => (
-            <BestSellersCard key={index} pizza={pizza}/>
+          {products.map((product, index) => (
+            <BestSellersCard key={index} product={product} />
           ))}
         </div>
 
         <div className="text-center mt-12">
           <Link href={"/menu"}>
-            <Button variant="outline" size="lg" className="cursor-pointer border-orange-200 text-orange-600 hover:bg-orange-50 px-8">
+            <Button
+              variant="outline"
+              size="lg"
+              className="cursor-pointer border-orange-200 text-orange-600 hover:bg-orange-50 px-8"
+            >
               View Full Menu
             </Button>
           </Link>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
 export default BestSellersSection;

@@ -132,7 +132,7 @@ export function ProfileContent() {
               {[
                 { value: "profile", icon: User, label: "Profile" },
                 { value: "orders", icon: ShoppingBag, label: "Orders" },
-                { value: "favorites", icon: Heart, label: "Favorites" },
+            
                 { value: "payment", icon: CreditCard, label: "Payments" },
                 ...(userInfo?.admin
                   ? [
@@ -161,9 +161,6 @@ export function ProfileContent() {
           />
           {/* Orders Tab */}
           <OrdersTab/>
-
-          {/* Favorites Tab */}
-          <FavoritesTab/>
 
           {/* Categories Tab */}
           {userInfo?.admin && (<CategoriesTab isAdmin={userInfo?.admin}/>)}
