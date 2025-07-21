@@ -44,7 +44,7 @@ const Providers = ({ children }: ProvidersProps) => {
     if (ls && ls.getItem('cart')) {
       setCartProducts(JSON.parse(ls.getItem('cart') || '[]'));
     }
-  }, []);
+  }, [ls]);
 
   function clearCart() {
     setCartProducts([]);

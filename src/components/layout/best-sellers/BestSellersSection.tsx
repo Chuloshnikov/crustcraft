@@ -5,16 +5,16 @@ import { Button } from '@/components/ui/button';
 import BestSellersCard from './BestSellersCard';
 import Link from 'next/link';
 import { getProducts } from '@/helpers';
-import { IMenuItem } from '@/models/MenuItem';
+import { ClientMenuItem } from '../../../../types/cart';
 
 
-const getRandomItems = (arr: IMenuItem[], count: number) => {
+const getRandomItems = (arr: ClientMenuItem[], count: number) => {
   const shuffled = [...arr].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
 };
 
 const BestSellersSection = () => {
-  const [products, setProducts] = useState<IMenuItem[]>([]);
+  const [products, setProducts] = useState<ClientMenuItem[]>([]);
   console.log(products);
 
   useEffect(() => {
