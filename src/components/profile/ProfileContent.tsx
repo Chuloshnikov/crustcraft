@@ -5,7 +5,6 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   User,
   Settings,
-  Heart,
   ShoppingBag,
   CreditCard,
   ChartColumnStacked,
@@ -22,7 +21,6 @@ import { UserInfoProps } from "../../../types/types";
 import { validateUserProfile, UserProfileType } from "@/lib/validation";
 import ProfileTab from "./profile-tabs/ProfileTab";
 import OrdersTab from "./profile-tabs/OrdersTab";
-import FavoritesTab from "./profile-tabs/FavoritesTab";
 import CategoriesTab from "./profile-tabs/CategoriesTab";
 import SettingsTab from "./profile-tabs/SettingsTab";
 import PaymentsTab from "./profile-tabs/PaymentsTab";
