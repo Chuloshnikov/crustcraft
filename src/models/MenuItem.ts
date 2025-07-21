@@ -1,6 +1,7 @@
-import { model, models, Schema, Document, Types } from "mongoose";
+import { model, models, Schema, Document, Types, Date } from "mongoose";
 
 export interface IExtraPrice {
+  _id?: string;
   name: string;
   price: number;
 }
@@ -15,8 +16,8 @@ export interface IMenuItem extends Document {
   basePrice: number;
   sizes: IExtraPrice[];
   extraIngredients: IExtraPrice[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const ExtraPriceSchema = new Schema<IExtraPrice>({
