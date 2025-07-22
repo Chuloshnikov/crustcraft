@@ -9,25 +9,60 @@ import CartProduct from "@/components/cart/CartProduct"
 import AddressInputs from "@/components/cart/AddressInputs"
 import { ShoppingCart, CreditCard, Truck, ShoppingBag } from "lucide-react"
 import Link from "next/link"
-import { useProfile } from "@/lib/hooks/useProfile"
 import { toast } from "sonner"
-import { AddressFields } from "@/lib/validators/address-fields"
+import { useSession } from "next-auth/react"
+import { LoadingContent } from "../loading/LoadingContent"
+import { redirect } from "next/navigation"
+import { UserInfoProps } from "../../../types/types"
+import { DeliveryInfoFieldsTypes } from "../../../types/cart"
+import { AddressFields, validateAddress } from "@/lib/validation"
 
 const deliveryFee = 5
 
 const CartContent = () => {
-  const cart = useContext(CartContext)
-  const { data: profileData } = useProfile()
+  const cart = useContext(CartContext);
+  const { data: session, status } = useSession();
+  const [changeAddressLoading, setChangeAddressLoading] = useState(false);
+  const emptyUserInfo: UserInfoProps = {
+  email: "",
+  firstName: "",
+  lastName: "",
+  avatarUrl: "",
+  phone: "",
+  address: "",
+  dateOfBirth: "",
+  admin: false
+};
+  const [userInfo, setUserInfo] = useState<UserInfoProps>(emptyUserInfo);
 
-  const [address, setAddress] = useState<AddressFields>({
+  const [deliveryInfo, setDeliveryInfo] = useState<DeliveryInfoFieldsTypes>({
     phone: "",
     streetAddress: "",
     postalCode: "",
     city: "",
     country: "",
-  })
+  });
+  const [formErrors, setFormErrors] = useState<Partial<Record<keyof AddressFields, string>>>({});
 
-  const [isLoading, setIsLoading] = useState(false)
+  console.log(deliveryInfo);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      fetch("/api/user-info")
+        .then((response) => response.json())
+        .then((data) => setUserInfo(data));
+    }
+  }, [status]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (window.location.href.includes('canceled=1')) {
+        toast.error('Payment failed 😔');
+      }
+    }
+  }, []);
 
   if (!cart) return null
 
@@ -67,6 +102,30 @@ const CartContent = () => {
 
     promise.finally(() => setIsLoading(false))
   }
+
+
+  function handleChangeDeliveryData() {
+    setChangeAddressLoading(true);
+    const errors = validateAddress(deliveryInfo);
+    setFormErrors(errors);
+
+    if (Object.keys(errors).length === 0) {
+      const fullAddress = `${deliveryInfo.streetAddress}, ${deliveryInfo.city} ${deliveryInfo.postalCode}`.trim();
+      setUserInfo((prev) => ({ ...prev, address: fullAddress, phone: deliveryInfo.phone }));
+    }
+    setChangeAddressLoading(false);
+  }
+
+  //status loading and redirect
+
+    if (status === "loading") {
+      return <LoadingContent />;
+    }
+  
+    if (status === "unauthenticated") {
+      redirect("/login");
+    }
+  
 
   if (cartProducts.length === 0) {
     return (
@@ -158,7 +217,26 @@ const CartContent = () => {
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={proceedToCheckout} className="space-y-6">
-                    <AddressInputs addressFields={address} setAddressFields={setAddress} />
+                    <AddressInputs 
+                    addressFields={deliveryInfo} 
+                    setAddressFields={setDeliveryInfo} 
+                    addressLoading={changeAddressLoading} 
+                    changeAddress={handleChangeDeliveryData}
+                    />
+
+                    {/*delivery Info*/}
+
+                    <div className="flex flex-col gap-2 bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg">
+                      <p className="text-xs font-semibold text-gray-500">
+                        Please pay attention to the correctness of the delivery address, 
+                        the delivery service is not responsible for delivery to the wrong address.
+                      </p>
+                      <div className="flex flex-col text-base text-gray-700">
+                        <span>customer: {session?.user.name}</span>
+                        <span>phone: {userInfo.phone}</span>
+                        <span>{userInfo.address}</span>
+                      </div>
+                    </div>
 
                     <Separator />
 

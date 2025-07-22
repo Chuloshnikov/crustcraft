@@ -66,5 +66,35 @@ export const MenuItemSchema = z.object({
   extraIngredients: z.array(ExtraIngredientSchema).optional(),
 });
 
+export const AddressSchema = z.object({
+  phone: z
+    .string()
+    .refine((val) => !val || /^\+\d{10,15}$/.test(val), {
+      message: "Phone must be in international format (e.g. +1234567890)",
+    }),
+  streetAddress: z.string().min(1, "Street address is required"),
+  postalCode: z.string().min(1, "Postal code is required"),
+  city: z.string().min(1, "City is required"),
+  country: z.string().min(1, "Country is required"),
+});
+
+export type AddressFields = z.infer<typeof AddressSchema>;
+
+export const validateAddress = (data: AddressFields): Partial<Record<keyof AddressFields, string>> => {
+  try {
+    AddressSchema.parse(data);
+    return {};
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      const fieldErrors: Partial<Record<keyof AddressFields, string>> = {};
+      err.errors.forEach((e) => {
+        const field = e.path[0] as keyof AddressFields;
+        fieldErrors[field] = e.message;
+      });
+      return fieldErrors;
+    }
+    return { phone: "Unknown error" }; // fallback
+  }
+};
 
 export type MenuItemFormData = z.infer<typeof MenuItemSchema>;
