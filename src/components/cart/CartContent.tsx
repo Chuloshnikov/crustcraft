@@ -1,21 +1,21 @@
 "use client"
 
-import { useContext, useState, useEffect } from "react"
-import { CartContext, cartProductPrice } from "@/app/providers"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import CartProduct from "@/components/cart/CartProduct"
-import AddressInputs from "@/components/cart/AddressInputs"
-import { ShoppingCart, CreditCard, Truck, ShoppingBag } from "lucide-react"
-import Link from "next/link"
-import { toast } from "sonner"
-import { useSession } from "next-auth/react"
-import { LoadingContent } from "../loading/LoadingContent"
-import { redirect } from "next/navigation"
-import { UserInfoProps } from "../../../types/types"
-import { DeliveryInfoFieldsTypes } from "../../../types/cart"
-import { AddressFields, validateAddress } from "@/lib/validation"
+import { useContext, useState, useEffect } from "react";
+import { CartContext, cartProductPrice } from "@/app/providers";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import CartProduct from "@/components/cart/CartProduct";
+import AddressInputs from "@/components/cart/AddressInputs";
+import { ShoppingCart, CreditCard, Truck, ShoppingBag } from "lucide-react";
+import Link from "next/link";
+import { toast } from "sonner";
+import { useSession } from "next-auth/react";
+import { LoadingContent } from "../loading/LoadingContent";
+import { redirect } from "next/navigation";
+import { UserInfoProps } from "../../../types/types";
+import { DeliveryInfoFieldsTypes } from "../../../types/cart";
+import { AddressFields, validateAddress } from "@/lib/validation";
 
 const deliveryFee = 5
 
@@ -108,6 +108,12 @@ const CartContent = () => {
     setChangeAddressLoading(true);
     const errors = validateAddress(deliveryInfo);
     setFormErrors(errors);
+    
+    if (Object.keys(errors).length > 0 || formErrors) {
+      toast.error("Please fill in all required fields correctly.");
+      setChangeAddressLoading(false);
+      return;
+    }
 
     if (Object.keys(errors).length === 0) {
       const fullAddress = `${deliveryInfo.streetAddress}, ${deliveryInfo.city} ${deliveryInfo.postalCode}`.trim();
@@ -232,9 +238,9 @@ const CartContent = () => {
                         the delivery service is not responsible for delivery to the wrong address.
                       </p>
                       <div className="flex flex-col text-base text-gray-700">
-                        <span>customer: {session?.user.name}</span>
-                        <span>phone: {userInfo.phone}</span>
-                        <span>{userInfo.address}</span>
+                        <div>customer: <span>{session?.user.name}</span> </div>
+                        <div>phone: <span>{userInfo.phone}</span></div>
+                        <div>Address: <span>{userInfo.address}</span></div>
                       </div>
                     </div>
 
