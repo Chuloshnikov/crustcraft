@@ -179,7 +179,7 @@ const CartContent = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {cartProducts.map((product, index) => (
+                    {cartProducts?.length > 0 && cartProducts.map((product, index) => (
                       <CartProduct
                         key={index}
                         product={product}
