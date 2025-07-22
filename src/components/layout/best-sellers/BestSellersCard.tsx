@@ -165,7 +165,7 @@ const BestSellersCard = ({product}: {product: ClientMenuItem}) => {
 
               <CardContent className="p-6">
                 <h3 className="font-bold text-lg mb-2">{product.name}</h3>
-                <p className="text-gray-600 text-sm mb-4">{product.description.slice(0, 80)}.....</p>
+                <p className="text-gray-600 text-sm mb-4">{product.description.slice(0, 80)}...</p>
 
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-orange-600">

@@ -10,6 +10,7 @@ interface CartProductProps {
     _id: string
     name: string
     image: string
+    description: string
     basePrice: number
     size?: {
       name: string
@@ -19,7 +20,6 @@ interface CartProductProps {
       name: string
       price: number
     }>
-    quantity: number
   }
   onRemove: (productId: string) => void
   price: number
@@ -66,6 +66,11 @@ const CartProduct = ({ product, onRemove, price }: CartProductProps) => {
             </div>
           </div>
         )}
+
+        {/* Quantity */}
+        <div className="flex items-center gap-2">
+          <p className="text-gray-500 text-sm">{product.description.slice(0, 80)}...</p>
+        </div>
       </div>
 
       {/* Price and Remove */}
