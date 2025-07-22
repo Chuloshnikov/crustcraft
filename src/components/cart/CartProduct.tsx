@@ -7,7 +7,7 @@ import Image from "next/image"
 
 interface CartProductProps {
   product: {
-    id: string
+    _id: string
     name: string
     image: string
     basePrice: number
