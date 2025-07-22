@@ -76,11 +76,16 @@ const CartContent = () => {
     ev.preventDefault()
     setIsLoading(true)
 
+    const address = {
+      address: userInfo.address,
+      phone: userInfo.phone,
+    };
+
     const promise = new Promise<void>((resolve, reject) => {
       fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ address, cartProducts }),
+        body: JSON.stringify({address, cartProducts }),
       })
         .then(async (response) => {
           if (response.ok) {
@@ -256,7 +261,7 @@ const CartContent = () => {
                     <Button
                       type="submit"
                       disabled={isLoading}
-                      className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white h-12 text-lg font-semibold"
+                      className="cursor-pointer w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white h-12 text-lg font-semibold"
                     >
                       {isLoading ? (
                         <div className="flex items-center space-x-2">

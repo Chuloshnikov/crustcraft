@@ -67,7 +67,7 @@ const CartProduct = ({ product, onRemove, price }: CartProductProps) => {
           </div>
         )}
 
-        {/* Quantity */}
+        {/* Product Description */}
         <div className="flex items-center gap-2">
           <p className="text-gray-500 text-sm">{product.description.slice(0, 80)}...</p>
         </div>
@@ -79,8 +79,8 @@ const CartProduct = ({ product, onRemove, price }: CartProductProps) => {
         <Button
           size="sm"
           variant="outline"
-          onClick={() => onRemove(product.id)}
-          className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+          onClick={() => onRemove(product._id)}
+          className="cursor-pointer text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
         >
           <Trash2 className="h-4 w-4" />
         </Button>
