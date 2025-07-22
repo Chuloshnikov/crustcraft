@@ -20,3 +20,13 @@ export interface CartProduct extends ClientMenuItem {
   size?: IExtraPrice;
   extras?: IExtraPrice[];
 }
+
+
+export interface DeliveryInfoFieldsTypes {
+  phone: string;
+  streetAddress: string,
+  postalCode: string,
+  city: string,
+  country: string,
+}
+

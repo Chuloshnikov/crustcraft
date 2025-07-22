@@ -1,36 +1,32 @@
-import React from "react"
-import { Input } from "@/components/ui/input"
-import { AddressFields } from "@/lib/validators/address-fields"
-import { z } from "zod"
+"use client";
 
-const addressSchema = z.object({
-  phone: z.string().refine((val) => !val || /^\+\d{10,15}$/.test(val), { 
-    message: "Phone must be in international format (e.g. +1234567890)" 
-  }),
-  streetAddress: z.string().min(1, "Street address is required"),
-  postalCode: z.string().min(1, "Postal code is required"),
-  city: z.string().min(1, "City is required"),
-  country: z.string().min(1, "Country is required"),
-})
+import React from "react";
+import { Input } from "@/components/ui/input";
+import { AddressFields } from "@/lib/validation";
+import { Button } from "@/components/ui/button";
 
 type AddressInputsProps = {
-  addressFields: AddressFields
-  setAddressFields: React.Dispatch<React.SetStateAction<AddressFields>>
-  errors?: Partial<Record<keyof AddressFields, string>>
-}
+  addressFields: AddressFields;
+  setAddressFields: React.Dispatch<React.SetStateAction<AddressFields>>;
+  errors?: Partial<Record<keyof AddressFields, string>>;
+  addressLoading: boolean;
+  changeAddress: () => void;
+};
 
 const AddressInputs = ({
   addressFields,
   setAddressFields,
   errors = {},
+  addressLoading,
+  changeAddress,
 }: AddressInputsProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setAddressFields((prev) => ({
+    const { name, value } = e.target;
+    setAddressFields((prev: AddressFields) => ({
       ...prev,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -84,8 +80,16 @@ const AddressInputs = ({
         />
         {errors.country && <p className="text-sm text-red-500">{errors.country}</p>}
       </div>
+      <Button
+        type="button"
+        disabled={addressLoading}
+        onClick={changeAddress}
+        className="cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+      >
+        {addressLoading ? "Changing address" : "Change delivery data"}
+      </Button>
     </div>
-  )
-}
+  );
+};
 
-export default AddressInputs
+export default AddressInputs;
