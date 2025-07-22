@@ -66,36 +66,6 @@ const CartProduct = ({ product, onRemove, price }: CartProductProps) => {
             </div>
           </div>
         )}
-
-        {/* Quantity */}
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-600">Quantity:</span>
-          <div className="flex items-center gap-2">
-            <Button
-              size="sm"
-              variant="outline"
-              className="w-8 h-8 p-0 bg-transparent"
-              onClick={() => {
-                // In real app, this would update quantity
-                console.log("Decrease quantity")
-              }}
-            >
-              <Minus className="h-3 w-3" />
-            </Button>
-            <span className="font-semibold min-w-[2rem] text-center">{product.quantity}</span>
-            <Button
-              size="sm"
-              variant="outline"
-              className="w-8 h-8 p-0 bg-transparent"
-              onClick={() => {
-                // In real app, this would update quantity
-                console.log("Increase quantity")
-              }}
-            >
-              <Plus className="h-3 w-3" />
-            </Button>
-          </div>
-        </div>
       </div>
 
       {/* Price and Remove */}
