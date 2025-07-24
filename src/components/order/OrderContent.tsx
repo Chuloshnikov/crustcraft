@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
@@ -9,56 +9,27 @@ import { LoadingContent } from "../loading/LoadingContent"
 import { CheckCircle, Clock, Truck, Phone, Receipt, MapPin, Calendar, CreditCard, Pizza } from "lucide-react"
 import Link from "next/link"
 import OrderProduct from "./OrderProduct"
+import { CartContext } from "@/app/providers"
 
-
-interface OrderItem {
-  _id: string
-  name: string
-  image: string
-  basePrice: number
-  size?: {
-    name: string
-    price: number
-  }
-  extras?: Array<{
-    name: string
-    price: number
-  }>
-  quantity: number
-}
-
-interface Order {
-  _id: string
-  cartProducts: OrderItem[]
-  phone: string
-  streetAddress: string
-  city: string
-  postalCode: string
-  country: string
-  status: string
-  createdAt: string
-  estimatedDelivery: string
-  paymentMethod: string
-}
 
 interface OrderContentProps {
   orderId: string
 }
 
 const OrderContent = ({ orderId }: OrderContentProps) => {
-    const {clearCart} = useContext(CartContext);
+    const { clearCart } = useContext(CartContext);
   const [order, setOrder] = useState();
   const [loadingOrder, setLoadingOrder] = useState(true);
-  const {id} = useParams();
+  
   useEffect(() => {
     if (typeof window.console !== "undefined") {
       if (window.location.href.includes('clear-cart=1')) {
         clearCart();
       }
     }
-    if (id) {
+    if (orderId) {
       setLoadingOrder(true);
-      fetch('/api/orders?_id='+id).then(res => {
+      fetch('/api/orders?_id='+orderId).then(res => {
         res.json().then(orderData => {
           setOrder(orderData);
           setLoadingOrder(false);
@@ -74,73 +45,8 @@ const OrderContent = ({ orderId }: OrderContentProps) => {
     }
   }
 
-  const [order, setOrder] = useState<Order | null>(null)
-  const [loadingOrder, setLoadingOrder] = useState(true)
 
-  useEffect(() => {
-    // Clear cart if specified in URL
-    if (typeof window !== "undefined") {
-      if (window.location.href.includes("clear-cart=1")) {
-        // clearCart() - would be called from context
-        console.log("Cart cleared")
-      }
-    }
-
-    if (orderId) {
-      setLoadingOrder(true)
-
-      // Simulate API call
-      setTimeout(() => {
-        // Mock order data
-        const mockOrder: Order = {
-          _id: orderId,
-          cartProducts: [
-            {
-              _id: "1",
-              name: "Margherita Classic",
-              image: "/placeholder.svg?height=200&width=200",
-              basePrice: 18.99,
-              size: {
-                name: "Large",
-                price: 6.0,
-              },
-              extras: [
-                { name: "Extra Cheese", price: 2.5 },
-                { name: "Fresh Basil", price: 1.5 },
-              ],
-              quantity: 1,
-            },
-            {
-              _id: "2",
-              name: "Pepperoni Supreme",
-              image: "/placeholder.svg?height=200&width=200",
-              basePrice: 22.99,
-              size: {
-                name: "Medium",
-                price: 3.0,
-              },
-              extras: [],
-              quantity: 2,
-            },
-          ],
-          phone: "+1 (555) 123-4567",
-          streetAddress: "123 Main Street, Apt 4B",
-          city: "Downtown",
-          postalCode: "12345",
-          country: "United States",
-          status: "confirmed",
-          createdAt: "2024-01-15T14:30:00Z",
-          estimatedDelivery: "2024-01-15T15:15:00Z",
-          paymentMethod: "Credit Card",
-        }
-
-        setOrder(mockOrder)
-        setLoadingOrder(false)
-      }, 1500)
-    }
-  }, [orderId])
-
-  const cartProductPrice = (product: OrderItem): number => {
+  const cartProductPrice = (product): number => {
     let price = product.basePrice
     if (product.size) {
       price += product.size.price
