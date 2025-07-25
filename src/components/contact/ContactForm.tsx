@@ -69,7 +69,7 @@ export function ContactForm() {
             <CheckCircle className="h-10 w-10 text-green-600" />
           </div>
           <h3 className="text-2xl font-bold text-gray-900 mb-4">Message Sent!</h3>
-          <p className="text-gray-600 mb-6">Thank you for contacting us. We'll get back to you within 24 hours.</p>
+          <p className="text-gray-600 mb-6">Thank you for contacting us. We&apos;ll get back to you within 24 hours.</p>
           <Button
             onClick={() => setIsSuccess(false)}
             className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
@@ -87,7 +87,7 @@ export function ContactForm() {
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Send us a Message</h2>
           <p className="text-gray-600">
-            Fill out the form below and we'll get back to you as soon as possible. All fields marked with * are
+            Fill out the form below and we&apos;ll get back to you as soon as possible. All fields marked with * are
             required.
           </p>
         </div>

@@ -23,7 +23,7 @@ const NotFoundHero = () => {
               Looks like this page took a wrong turn on the way to your table!
             </p>
         <p className="text-gray-500">
-            Don&apos;t worry, our pizzas are still hot and ready. Let's get you back on track.
+            Don&apos;t worry, our pizzas are still hot and ready. Let&apos;s get you back on track.
         </p>
     </div>
   )

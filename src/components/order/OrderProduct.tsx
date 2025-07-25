@@ -8,7 +8,7 @@ import { OrderProductProps } from "../../../types/cart";
 
 const OrderProduct = ({ product, price }: OrderProductProps) => {
   return (
-    <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+    <div className="flex flex-col md:flex-row items-center gap-4 p-4 bg-gray-50 rounded-lg">
       {/* Product Image */}
       <div className="flex-shrink-0">
         <Image

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useCart } from '@/hooks/useCart';
-import { Heart, ShoppingCart } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 import { ClientMenuItem } from '../../../../types/cart';
 import { toast } from 'sonner';
@@ -157,10 +157,7 @@ const BestSellersCard = ({product}: {product: ClientMenuItem}) => {
                   <div className="absolute top-3 left-3 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
                     Popular
                   </div>
-                )}
-                <button className="absolute top-3 right-3 p-2 bg-white/90 rounded-full hover:bg-white transition-colors">
-                  <Heart className="h-4 w-4 text-gray-600 hover:text-red-500" />
-                </button>
+                )}            
               </div>
 
               <CardContent className="p-6">
