@@ -18,7 +18,7 @@ export async function GET(req: Request) {
   const _id = url.searchParams.get('_id');
   const post = await Order.findById(_id) as string | null;
 
-   if (_id) {
+  if (_id) {
     return Response.json( await Order.findById(_id) );
   }
 
