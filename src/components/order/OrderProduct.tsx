@@ -47,9 +47,6 @@ const OrderProduct = ({ product, price }: OrderProductProps) => {
             </div>
           </div>
         )}
-
-        {/* Quantity */}
-      
       </div>
 
       {/* Price */}
