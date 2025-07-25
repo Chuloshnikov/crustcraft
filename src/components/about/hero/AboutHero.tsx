@@ -1,6 +1,3 @@
-import Image from "next/image";
-import { Button } from "../../ui/button";
-import { ArrowRight, Play } from "lucide-react";
 import AboutHeroLeftContent from "./AboutHeroLeftContent";
 import AboutHeroRightContent from "./AboutHeroRightContent";
 

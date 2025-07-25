@@ -1,11 +1,9 @@
-import MenuContent from "@/components/menu/MenuContent";
-import MenuHero from "@/components/menu/MenuHero";
+import MenuContainer from "@/components/menu/MenuContainer";
 
 export default function MenuPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-        <MenuHero />
-        <MenuContent />
+        <MenuContainer/>
     </div>
   )
 }

@@ -58,6 +58,11 @@ const OrdersTab = () => {
                   <div>Loading orders...</div>
                 )}
                 <div className="space-y-4">
+                  {!!recentOrders && (
+                    <div className='flex items-center justify-center'>
+                      <p className='font-semibold text-gray-500'>You have no orders yet</p>
+                    </div>
+                  )}
                   {recentOrders && recentOrders.map((order: IOrder) => (
                     <Link
                     key={order._id}

@@ -1,4 +1,4 @@
-import { ABOUT_FEATURES, features } from '@/lib/constants';
+import { ABOUT_FEATURES } from '@/lib/constants';
 import React from 'react';
 import OurStoryItem from './OurStoryItem';
 
