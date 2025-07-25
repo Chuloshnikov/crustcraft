@@ -29,9 +29,10 @@ export async function POST(req: Request) {
 
     let productPrice = productInfo.basePrice;
     if (cartProduct.size) {
-      const size = productInfo.sizes 
-        .find((size: { _id: string; name: string; price: number }) => size._id.toString() === cartProduct.size._id.toString());
-      productPrice += size.price;
+      const size = productInfo.sizes.find((size: { _id: string; name: string; price: number }) => size._id.toString() === cartProduct.size._id.toString());
+      if (size) {
+        productPrice += size.price;
+      }
     }
     if (cartProduct.extras?.length > 0) {
       for (const cartProductExtraThing of cartProduct.extras) {

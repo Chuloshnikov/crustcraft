@@ -1,16 +1,15 @@
 import {model, models, Schema} from "mongoose";
 import { CartProduct } from "../../types/cart";
 
-export interface AddressTypes {
-phone: string;
-address: string;
-}
 
 export interface IOrder extends Document {
   userEmail: string,
-  address: AddressTypes,
-  cartProducts: CartProduct,
+  phone: string;
+  address: string,
+  cartProducts: CartProduct[],
   paid: boolean,
+  createdAt?: Date,
+  updatedAt?: Date,
 };
 
 

@@ -6,10 +6,12 @@ import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import OrderAddressDisplay from "./OrderAddressDisplay"
 import { LoadingContent } from "../loading/LoadingContent"
-import { CheckCircle, Clock, Truck, Phone, Receipt, MapPin, Calendar, CreditCard, Pizza } from "lucide-react"
+import { Truck, Phone, Receipt, MapPin, Calendar, CreditCard, Pizza } from "lucide-react"
 import Link from "next/link"
 import OrderProduct from "./OrderProduct"
 import { CartContext } from "@/app/providers"
+import { CartProduct } from "../../../types/cart"
+import { IOrder } from "@/models/Order"
 
 
 interface OrderContentProps {
@@ -17,8 +19,12 @@ interface OrderContentProps {
 }
 
 const OrderContent = ({ orderId }: OrderContentProps) => {
-    const { clearCart } = useContext(CartContext);
-  const [order, setOrder] = useState();
+  const cartContext = useContext(CartContext);
+  if (!cartContext) {
+    throw new Error("CartContext not provided");
+  }
+  const { clearCart } = cartContext;
+  const [order, setOrder] = useState<IOrder | null>(null);
   const [loadingOrder, setLoadingOrder] = useState(true);
   
   useEffect(() => {
@@ -38,15 +44,7 @@ const OrderContent = ({ orderId }: OrderContentProps) => {
     }
   }, []);
 
-  let subtotal = 0;
-  if (order?.cartProducts) {
-    for (const product of order?.cartProducts) {
-      subtotal += cartProductPrice(product);
-    }
-  }
-
-
-  const cartProductPrice = (product): number => {
+  const cartProductPrice = (product: CartProduct): number => {
     let price = product.basePrice
     if (product.size) {
       price += product.size.price
@@ -56,55 +54,23 @@ const OrderContent = ({ orderId }: OrderContentProps) => {
         price += extra.price
       }
     }
-    return price * product.quantity
+    return price
   }
 
+  
   // Calculate totals
-  let subtotal = 0
+  let subtotal = 0;
   if (order?.cartProducts) {
-    for (const product of order.cartProducts) {
-      subtotal += cartProductPrice(product)
+    for (const product of order?.cartProducts) {
+      subtotal += cartProductPrice(product);
     }
   }
+
+
+
   const deliveryFee = 5
   const total = subtotal + deliveryFee
 
-  const getStatusInfo = (status: string) => {
-    switch (status) {
-      case "confirmed":
-        return {
-          icon: CheckCircle,
-          color: "text-green-600",
-          bgColor: "bg-green-100",
-          text: "Order Confirmed",
-          description: "Your order has been confirmed and is being prepared",
-        }
-      case "preparing":
-        return {
-          icon: Clock,
-          color: "text-orange-600",
-          bgColor: "bg-orange-100",
-          text: "Preparing",
-          description: "Our chefs are preparing your delicious order",
-        }
-      case "on-the-way":
-        return {
-          icon: Truck,
-          color: "text-blue-600",
-          bgColor: "bg-blue-100",
-          text: "On the Way",
-          description: "Your order is on its way to you",
-        }
-      default:
-        return {
-          icon: Clock,
-          color: "text-gray-600",
-          bgColor: "bg-gray-100",
-          text: "Processing",
-          description: "We're processing your order",
-        }
-    }
-  }
 
   if (loadingOrder) {
     return (
@@ -136,8 +102,6 @@ const OrderContent = ({ orderId }: OrderContentProps) => {
     )
   }
 
-  const statusInfo = getStatusInfo(order.status)
-  const StatusIcon = statusInfo.icon
 
   return (
     <section className="py-12">
@@ -152,15 +116,9 @@ const OrderContent = ({ orderId }: OrderContentProps) => {
               <h1 className="text-4xl font-bold text-gray-900">Order Confirmation</h1>
             </div>
 
-            {/* Status Badge */}
-            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${statusInfo.bgColor} mb-4`}>
-              <StatusIcon className={`h-5 w-5 ${statusInfo.color}`} />
-              <span className={`font-semibold ${statusInfo.color}`}>{statusInfo.text}</span>
-            </div>
 
             <div className="space-y-2">
               <h2 className="text-2xl font-bold text-gray-900">Thank you for your order!</h2>
-              <p className="text-gray-600">{statusInfo.description}</p>
               <p className="text-gray-600">We will call you when your order is on the way.</p>
             </div>
           </div>
@@ -179,7 +137,7 @@ const OrderContent = ({ orderId }: OrderContentProps) => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {order.cartProducts.map((product) => (
+                    {order?.cartProducts?.map((product: CartProduct) => (
                       <OrderProduct key={product._id} product={product} price={cartProductPrice(product)} />
                     ))}
                   </div>
@@ -228,23 +186,15 @@ const OrderContent = ({ orderId }: OrderContentProps) => {
                   <div>
                     <div className="text-sm text-gray-600">Order Date</div>
                     <div className="font-semibold">
-                      {new Date(order.createdAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="text-sm text-gray-600">Estimated Delivery</div>
-                    <div className="font-semibold text-orange-600">
-                      {new Date(order.estimatedDelivery).toLocaleTimeString("en-US", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {order?.createdAt
+                        ? new Date(order.createdAt).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : "Unknown date"}
                     </div>
                   </div>
 
@@ -253,7 +203,7 @@ const OrderContent = ({ orderId }: OrderContentProps) => {
                       <CreditCard className="h-4 w-4" />
                       Payment Method
                     </div>
-                    <div className="font-semibold">{order.paymentMethod}</div>
+                    <div className="font-semibold">Card</div>
                   </div>
                 </CardContent>
               </Card>
@@ -287,7 +237,7 @@ const OrderContent = ({ orderId }: OrderContentProps) => {
                     </div>
                     <div className="bg-orange-50 p-3 rounded-lg">
                       <p className="text-sm text-orange-800">
-                        We'll call you 5-10 minutes before delivery to confirm you're available.
+                        We&apos;ll call you 5-10 minutes before delivery to confirm you&apos;re available.
                       </p>
                     </div>
                   </div>
@@ -295,16 +245,16 @@ const OrderContent = ({ orderId }: OrderContentProps) => {
               </Card>
 
               {/* Action Buttons */}
-              <div className="space-y-3">
+              <div className="flex flex-col gap-1">
                 <Link href="/menu">
-                  <Button className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
+                  <Button className="cursor-pointer w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
                     Order Again
                   </Button>
                 </Link>
                 <Link href="/profile">
                   <Button
                     variant="outline"
-                    className="w-full border-orange-200 text-orange-600 hover:bg-orange-50 bg-transparent"
+                    className="cursor-pointer w-full border-orange-200 text-orange-600 hover:bg-orange-50 bg-transparent"
                   >
                     View Order History
                   </Button>
