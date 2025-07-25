@@ -3,6 +3,7 @@ import { CartProduct } from "../../types/cart";
 
 
 export interface IOrder extends Document {
+  _id?: string,
   userEmail: string,
   phone: string;
   address: string,
