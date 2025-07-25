@@ -5,12 +5,12 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: Request) {
-  const sig = req.headers.get('stripe-signature');
+  const sig = req.headers.get('stripe-signature') as string;
   let event;
 
   try {
     const reqBuffer = await req.text();
-    const signSecret = process.env.STRIPE_SIGN_SECRET;
+    const signSecret = process.env.STRIPE_SIGN_SECRET!;
     event = stripe.webhooks.constructEvent(reqBuffer, sig, signSecret);
   } catch (e) {
     console.error('stripe error');
