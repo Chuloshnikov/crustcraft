@@ -2,25 +2,9 @@
 
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
+import { OrderProductProps } from "../../../types/cart";
 
-interface OrderProductProps {
-  product: {
-    _id: string
-    name: string
-    image: string
-    basePrice: number
-    size?: {
-      name: string
-      price: number
-    }
-    extras?: Array<{
-      name: string
-      price: number
-    }>
-    quantity: number
-  }
-  price: number
-}
+
 
 const OrderProduct = ({ product, price }: OrderProductProps) => {
   return (

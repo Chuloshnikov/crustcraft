@@ -30,3 +30,21 @@ export interface DeliveryInfoFieldsTypes {
   country: string,
 }
 
+export interface OrderProductProps {
+  product: {
+    _id: string
+    name: string
+    image: string
+    basePrice: number
+    size?: {
+      name: string
+      price: number
+    }
+    extras?: Array<{
+      name: string
+      price: number
+    }>
+  }
+  price: number
+}
+

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Trash2, Plus, Minus } from "lucide-react"
+import { Trash2 } from "lucide-react"
 import Image from "next/image"
 
 interface CartProductProps {
