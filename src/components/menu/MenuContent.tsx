@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Star, Heart, ShoppingCart, Plus, Minus } from "lucide-react"
 import Image from "next/image"
+import { ICategory } from "@/models/Category"
 
 interface MenuItem {
   id: number
@@ -24,21 +25,21 @@ interface MenuItem {
 }
 
 
-const MenuContent = () => {
-  const [selectedCategory, setSelectedCategory] = useState("all")
+const MenuContent = (
+  {
+    categories,
+    selectedCategory, 
+    setSelectedCategory
+  }: {
+    categories: ICategory, 
+    selectedCategory: string, 
+    setSelectedCategory: (value: string) => void
+  }) => {
+  
   const [cart, setCart] = useState<{ [key: number]: number }>({})
   const [favorites, setFavorites] = useState<Set<number>>(new Set())
 
-  const categories = [
-    { id: "all", name: "All Items", count: 24 },
-    { id: "pizza", name: "Pizzas", count: 12 },
-    { id: "appetizers", name: "Appetizers", count: 6 },
-    { id: "salads", name: "Salads", count: 4 },
-    { id: "pasta", name: "Pasta", count: 5 },
-    { id: "desserts", name: "Desserts", count: 3 },
-    { id: "beverages", name: "Beverages", count: 8 },
-  ]
-
+ 
   const menuItems: MenuItem[] = [
     // Pizzas
     {
@@ -289,10 +290,19 @@ const MenuContent = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Category Filter */}
         <div className="flex flex-wrap gap-2 mb-8 justify-center">
+          <Button
+          className={`${
+              selectedCategory === "all"
+                ? "bg-gradient-to-r from-orange-500 to-red-500 text-white"
+                : "border-orange-200 text-orange-600 hover:bg-orange-50"
+          }`}
+          >
+            Show all
+          </Button>
           {categories.map((category) => (
             <Button
-              key={category.id}
-              variant={selectedCategory === category.id ? "default" : "outline"}
+              key={category._id}
+              variant={selectedCategory === category._id ? "default" : "outline"}
               onClick={() => setSelectedCategory(category.id)}
               className={`${
                 selectedCategory === category.id
