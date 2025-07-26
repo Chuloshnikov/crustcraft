@@ -36,8 +36,8 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
                       onClick={isEditing ? handleSave : () => setIsEditing(true)}
                       className={
                         isEditing
-                          ? "bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
-                          : "border-orange-200 text-orange-600 hover:bg-orange-50"
+                          ? "cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
+                          : "cursor-pointer border-orange-200 text-orange-600 hover:bg-orange-50"
                       }
                     >
                       {isEditing ? (
