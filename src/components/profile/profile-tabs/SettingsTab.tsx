@@ -22,8 +22,8 @@ const SettingsTab = () => {
                       <p className="font-medium">Order Updates</p>
                       <p className="text-sm text-gray-600">Get notified about your order status</p>
                     </div>
-                    <Button variant="outline" size="sm">
-                      Enabled
+                    <Button className='cursor-not-allowed hover:cursor-not-allowed' variant="outline" size="sm">
+                      Disabled
                     </Button>
                   </div>
                   <Separator />
@@ -32,8 +32,8 @@ const SettingsTab = () => {
                       <p className="font-medium">Promotional Emails</p>
                       <p className="text-sm text-gray-600">Receive special offers and deals</p>
                     </div>
-                    <Button variant="outline" size="sm">
-                      Enabled
+                    <Button className='cursor-not-allowed hover:cursor-not-allowed' variant="outline" size="sm">
+                      Disabled
                     </Button>
                   </div>
                 </CardContent>
@@ -49,19 +49,19 @@ const SettingsTab = () => {
                 <CardContent className="space-y-4">
                   <Button
                     variant="outline"
-                    className="w-full justify-start border-orange-200 text-orange-600 hover:bg-orange-50 bg-transparent"
+                    className="cursor-not-allowed hover:cursor-not-allowed w-full justify-start border-orange-200 text-orange-600 hover:bg-orange-50 bg-transparent"
                   >
                     Change Password
                   </Button>
                   <Button
                     variant="outline"
-                    className="w-full justify-start border-orange-200 text-orange-600 hover:bg-orange-50 bg-transparent"
+                    className="cursor-not-allowed hover:cursor-not-allowed w-full justify-start border-orange-200 text-orange-600 hover:bg-orange-50 bg-transparent"
                   >
                     Enable Two-Factor Authentication
                   </Button>
                   <Button
                     variant="outline"
-                    className="w-full justify-start border-red-200 text-red-600 hover:bg-red-50 bg-transparent"
+                    className="cursor-not-allowed hover:cursor-not-allowed w-full justify-start border-red-200 text-red-600 hover:bg-red-50 bg-transparent"
                   >
                     Delete Account
                   </Button>
