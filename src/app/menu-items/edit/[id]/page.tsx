@@ -30,7 +30,7 @@ export default async function EditItem({ params }: PageProps) {
         mode="edit"
         initialData={item}
         categories={categories}
-        onSuccessRedirect="/profile"
+        onSuccessRedirect={"/profile"}
       />
     </div>
   );
