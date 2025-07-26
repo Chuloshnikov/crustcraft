@@ -14,8 +14,8 @@ export interface IMenuItem extends Document {
   popular?: boolean;
   category: Types.ObjectId;
   basePrice: number;
-  sizes: IExtraPrice[];
-  extraIngredients: IExtraPrice[];
+  sizes?: IExtraPrice[];
+  extraIngredients?: IExtraPrice[];
   createdAt?: Date;
   updatedAt?: Date;
 }
