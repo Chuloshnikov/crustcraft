@@ -120,7 +120,7 @@ export function ContactForm() {
             <CheckCircle className="h-10 w-10 text-green-600" />
           </div>
           <h3 className="text-2xl font-bold text-gray-900 mb-4">Message Sent!</h3>
-          <p className="text-gray-600 mb-6">Thank you for contacting us. We'll get back to you soon.</p>
+          <p className="text-gray-600 mb-6">Thank you for contacting us. We&apos;ll get back to you soon.</p>
           <Button
             onClick={() => setIsSuccess(false)}
             className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"

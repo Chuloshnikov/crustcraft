@@ -1,9 +1,3 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { ArrowRight, Play } from 'lucide-react';
-import HeroLinks from './HeroLinks';
-import HeroStats from './HeroStats';
 import HeroLeftContent from './HeroLeftContent';
 import HeroRightContent from './HeroRightContent';
 

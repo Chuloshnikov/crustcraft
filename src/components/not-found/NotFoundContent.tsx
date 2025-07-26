@@ -1,10 +1,6 @@
 "use client"
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Heart, Star } from "lucide-react";
-import Image from "next/image";
 import NotFoundHero from "./hero/NotFoundHero";
 import NotFoundSearchBar from "./search-bar/NotFoundSearchBar";
 import QuickActions from "./quick-actions/QuickActions";
