@@ -1,3 +1,4 @@
+"use server"
 import MenuContainer from "@/components/menu/MenuContainer";
 import { Category } from "@/models/Category";
 
