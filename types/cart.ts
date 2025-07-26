@@ -10,8 +10,8 @@ export interface ClientMenuItem {
   popular?: boolean;
   category: Types.ObjectId | string;
   basePrice: number;
-  sizes: IExtraPrice[];
-  extraIngredients: IExtraPrice[];
+  sizes?: IExtraPrice[];
+  extraIngredients?: IExtraPrice[];
   createdAt: string;
   updatedAt: string;
 }
