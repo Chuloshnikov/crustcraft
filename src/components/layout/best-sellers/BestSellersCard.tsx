@@ -82,7 +82,7 @@ const BestSellersCard = ({product}: {product: ClientMenuItem}) => {
                               {product.sizes.length > 0 && (
                                 <div className='py-2'>
                                     <h3 className='text-center text-base font-semibold'>Pick your size</h3>
-                                    {product.sizes.map(size => (
+                                    {product?.sizes.map(size => (
                                     <Label className='max-w-max flex items-center gap-1 rounded-md mb-1' key={size.name}>
                                       <Input
                                       onChange={() => setSelectedSize(size)}

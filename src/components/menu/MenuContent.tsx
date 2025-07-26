@@ -52,7 +52,7 @@ function CategoryFilters({
       <Button
         onClick={() => onSelect("all")}
         variant={selectedCategory === "all" ? "default" : "outline"}
-        className={selectedCategory === "all" ? "bg-orange-500 text-white" : ""}
+        className={`${selectedCategory === "all" ? "bg-orange-500 text-white" : ""} cursor-pointer`}
       >
         Show all
       </Button>
@@ -61,7 +61,7 @@ function CategoryFilters({
           key={category._id}
           onClick={() => onSelect(category._id)}
           variant={selectedCategory === category._id ? "default" : "outline"}
-          className={selectedCategory === category._id ? "bg-orange-500 text-white" : ""}
+          className={`${selectedCategory === category._id ? "bg-orange-500 text-white" : ""} cursor-pointer`}
         >
           {category.name}
         </Button>

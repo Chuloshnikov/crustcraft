@@ -33,7 +33,7 @@ const PaymentsTab = () => {
                   </div>
                   <Button
                     variant="outline"
-                    className="w-full border-orange-200 text-orange-600 hover:bg-orange-50 bg-transparent"
+                    className="cursor-not-allowed hover:cursor-not-allowed w-full border-orange-200 text-orange-600 hover:bg-orange-50 bg-transparent"
                   >
                     Add New Payment Method
                   </Button>
