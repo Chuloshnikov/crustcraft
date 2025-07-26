@@ -1,108 +1,61 @@
 "use client"
 
+import { useEffect, useState, useMemo } from "react";
 import MenuContent from "@/components/menu/MenuContent";
 import MenuHero from "@/components/menu/MenuHero";
 import { ICategory } from "@/models/Category";
-import { IExtraPrice } from "@/models/MenuItem";
-import { useEffect, useState,  useMemo } from "react";
+import { ClientMenuItem } from "../../../types/cart";
 
-interface MenuItemWithCategory {
-  _id: string;
-  name: string;
-  description: string;
-  popular?: boolean;
-  category: string ;
-  basePrice: number;
-  sizes?: IExtraPrice[];
-  extraIngredients?: IExtraPrice[];
-  createdAt?: Date;
-  updatedAt?: Date;
-
+interface MenuContainerProps {
+  categories: ICategory[];
 }
 
-const MenuContainer = ({ categories }: { categories: ICategory[] }) => {
-  const [allMenuItems, setAllMenuItems] = useState<MenuItemWithCategory[]>([]);
+export default function MenuContainer({ categories }: MenuContainerProps) {
+  const [menuItems, setMenuItems] = useState<ClientMenuItem[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
 
-  // Загружаем все товары один раз
   useEffect(() => {
-    const fetchItems = async () => {
+    const loadMenuItems = async () => {
       try {
-        const res = await fetch('/api/menu-items');
-        const data = await res.json();
-        setAllMenuItems(data);
+        const response = await fetch('/api/menu-items');
+        const data = await response.json();
+        setMenuItems(data);
       } catch (error) {
-        console.error('Error loading menu items:', error);
+        console.error("Failed to load menu items:", error);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchItems();
+
+    loadMenuItems();
   }, []);
 
-  // Мемоизированная фильтрация
   const filteredItems = useMemo(() => {
-    let result = [...allMenuItems];
-
-    // Фильтрация по поиску
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      result = result.filter(item => 
-        item.name.toLowerCase().includes(query)
-      );
-    }
-
-    // Фильтрация по категории
-    if (selectedCategory !== 'all') {
-      result = result.filter(item => item.category === selectedCategory);
-    }
-
-    return result;
-  }, [allMenuItems, searchQuery, selectedCategory]);
-
-  // Группировка по категориям
-  const itemsByCategory = useMemo(() => {
-    const grouped: Record<string, MenuItemWithCategory[]> = {};
-
-    // Создаем записи для всех категорий
-    categories.forEach(cat => {
-      grouped[cat._id] = [];
-    });
-
-    // Добавляем "Все" категории
-    grouped['all'] = allMenuItems;
-
-    // Распределяем товары по категориям
-    filteredItems.forEach(item => {
-      const categoryId = typeof item.category === 'object' 
-        ? item.category._id 
-        : item.category;
+    return menuItems.filter(item => {
+      const matchesSearch = searchQuery 
+        ? item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        : true;
       
-      if (grouped[categoryId]) {
-        grouped[categoryId].push(item);
-      }
-    });
+      const matchesCategory = selectedCategory === "all" 
+        ? true 
+        : item.category === selectedCategory;
 
-    return grouped;
-  }, [filteredItems, categories, allMenuItems]);
+      return matchesSearch && matchesCategory;
+    });
+  }, [menuItems, searchQuery, selectedCategory]);
 
   return (
     <>
-      <MenuHero 
-        search={searchQuery} 
-        setSearch={setSearchQuery} 
-      />
+      <MenuHero search={searchQuery} onSearchChange={setSearchQuery} />
       <MenuContent
-        menuItems={filteredItems}
+        items={filteredItems}
         categories={categories}
         selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
+        onCategoryChange={setSelectedCategory}
         isLoading={isLoading}
       />
     </>
   );
-};
-
-export default MenuContainer;
+}

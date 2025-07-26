@@ -1,106 +1,85 @@
 "use client"
 
-import { useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Star, Heart, ShoppingCart, Plus, Minus } from "lucide-react"
-import Image from "next/image"
-import { ICategory } from "@/models/Category"
-import { ClientMenuItem } from "../../../types/cart"
-import MenuItemCard from "./MenuItemCard"
+import { Button } from "@/components/ui/button";
+import MenuItemCard from "./MenuItemCard";
+import { ICategory, ClientMenuItem } from "@/types/cart";
 
-interface MenuItem {
-  id: number
-  name: string
-  description: string
-  price: number
-  originalPrice?: number
-  image: string
-  category: string
-  rating: number
-  reviews: number
-  popular?: boolean
-  vegetarian?: boolean
-  spicy?: boolean
-  new?: boolean
+interface MenuContentProps {
+  items: ClientMenuItem[];
+  categories: ICategory[];
+  selectedCategory: string;
+  onCategoryChange: (categoryId: string) => void;
+  isLoading: boolean;
 }
 
-
-const MenuContent = (
-  {
-    categories,
-    selectedCategory, 
-    setSelectedCategory,
-    menuItems,
-    isLoading
-  }: {
-    categories: ICategory[], 
-    selectedCategory: string, 
-    setSelectedCategory: (value: string) => void,
-    menuItems: ClientMenuItem[],
-    isLoading: boolean
-  }) => {
-  const [favorites, setFavorites] = useState<Set<number>>(new Set())
-
-  const filteredItems = menuItems.filter((item) => selectedCategory === "all" || item.category === selectedCategory)
-
-
-  const toggleFavorite = (itemId: number) => {
-    setFavorites((prev) => {
-      const newFavorites = new Set(prev)
-      if (newFavorites.has(itemId)) {
-        newFavorites.delete(itemId)
-      } else {
-        newFavorites.add(itemId)
-      }
-      return newFavorites
-    })
+export default function MenuContent({
+  items,
+  categories,
+  selectedCategory,
+  onCategoryChange,
+  isLoading
+}: MenuContentProps) {
+  if (isLoading) {
+    return <div className="text-center py-12">Loading menu items...</div>;
   }
-
 
   return (
     <section className="py-12 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Category Filter */}
-        <div className="flex flex-wrap gap-2 mb-8 justify-center">
-          <Button
-          className={`${
-              selectedCategory === "all"
-                ? "bg-gradient-to-r from-orange-500 to-red-500 text-white"
-                : "border-orange-200 text-orange-600 hover:bg-orange-50"
-          }`}
-          >
-            Show all
-          </Button>
-          {categories.map((category) => (
-            <Button
-              key={category._id}
-              variant={selectedCategory === category._id ? "default" : "outline"}
-              onClick={() => setSelectedCategory(category.id)}
-              className={`${
-                selectedCategory === category.id
-                  ? "bg-gradient-to-r from-orange-500 to-red-500 text-white"
-                  : "border-orange-200 text-orange-600 hover:bg-orange-50"
-              }`}
-            >
-              {category.name}
-              <Badge variant="secondary" className="ml-2">
-                @
-              </Badge>
-            </Button>
-          ))}
-        </div>
-
-        {/* Menu Items Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-          {filteredItems.map((item) => (
-            <MenuItemCard key={item._id} item={item}/>
-          ))}
-        </div>
+        <CategoryFilters 
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onSelect={onCategoryChange}
+        />
+        
+        <MenuItemsGrid items={items} />
       </div>
     </section>
-  )
+  );
 }
 
-export default MenuContent;
+function CategoryFilters({
+  categories,
+  selectedCategory,
+  onSelect
+}: {
+  categories: ICategory[];
+  selectedCategory: string;
+  onSelect: (categoryId: string) => void;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2 mb-8 justify-center">
+      <Button
+        onClick={() => onSelect("all")}
+        variant={selectedCategory === "all" ? "default" : "outline"}
+        className={selectedCategory === "all" ? "bg-orange-500 text-white" : ""}
+      >
+        Show all
+      </Button>
+      {categories.map(category => (
+        <Button
+          key={category._id}
+          onClick={() => onSelect(category._id)}
+          variant={selectedCategory === category._id ? "default" : "outline"}
+          className={selectedCategory === category._id ? "bg-orange-500 text-white" : ""}
+        >
+          {category.name}
+        </Button>
+      ))}
+    </div>
+  );
+}
+
+function MenuItemsGrid({ items }: { items: ClientMenuItem[] }) {
+  if (items.length === 0) {
+    return <p className="text-center text-gray-500">No items found</p>;
+  }
+
+  return (
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {items.map(item => (
+        <MenuItemCard key={item._id} item={item} />
+      ))}
+    </div>
+  );
+}

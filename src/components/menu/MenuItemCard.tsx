@@ -1,52 +1,39 @@
 "use client"
 
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import Image from "next/image"
-import { ClientMenuItem } from "../../../types/cart"
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
+import { ClientMenuItem } from "../../../types/cart";
 
 interface MenuItemCardProps {
-  item: ClientMenuItem
-  cart: { [key: number]: number }
-  favorites: Set<number>
-  onAddToCart: (itemId: number) => void
-  onRemoveFromCart: (itemId: number) => void
-  onToggleFavorite: (itemId: number) => void
+  item: ClientMenuItem;
 }
 
-const MenuItemCard = ({
-  item,
-}: MenuItemCardProps) => {
+export default function MenuItemCard({ item }: MenuItemCardProps) {
   return (
-    <Card className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg overflow-hidden">
-      <div className="relative">
+    <Card className="hover:shadow-lg transition-shadow duration-300">
+      <div className="relative aspect-square overflow-hidden">
         <Image
-          src={item.image || "/placeholder.svg"}
+          src={item.image || "/placeholder-food.jpg"}
           alt={item.name}
-          width={300}
-          height={300}
-          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+          fill
+          className="object-cover rounded-t-lg hover:scale-125 duration-300"
         />
-
-        {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1">
-          {item.popular && (
-            <Badge className="bg-gradient-to-r from-orange-500 to-red-500 text-white">Popular</Badge>
-          )}
-        </div>
-
+        
+        {item.popular && (
+          <Badge className="absolute top-2 left-2 bg-orange-500">
+            Popular
+          </Badge>
+        )}
       </div>
-
-      <CardContent className="p-6">
-
-        <h3 className="font-bold text-lg mb-2">{item.name}</h3>
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{item.description}</p>
-
-    
-       
+      
+      <CardContent className="p-4">
+        <h3 className="font-bold text-lg mb-1">{item.name}</h3>
+        <p className="text-gray-600 text-sm line-clamp-2 mb-3">{item.description}</p>
+        <div className="flex justify-between items-center">
+          <span className="font-bold text-orange-600">${item.basePrice.toFixed(2)}</span>
+        </div>
       </CardContent>
     </Card>
-  )
+  );
 }
-
-export default MenuItemCard;
