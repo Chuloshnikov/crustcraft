@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { Send, CheckCircle } from "lucide-react"
 import { contactFormSchema, FormErrors, ContactFormValues } from "@/lib/validation"
-import { z } from "zod"
 
 export function ContactForm() {
   const [isLoading, setIsLoading] = useState(false)
