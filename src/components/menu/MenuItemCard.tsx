@@ -7,10 +7,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ShoppingCart } from "lucide-react"
 import Image from "next/image"
-import { useState } from "react"
+import { useState, ChangeEvent } from "react"
 import { toast } from "sonner"
 import { useCart } from "@/hooks/useCart"
-import { ClientMenuItem, IExtraPrice } from "@/types/cart"
+import { ClientMenuItem } from "../../../types/cart"
+import { IExtraPrice } from "@/models/MenuItem"
+
 
 interface MenuItemCardProps {
   item: ClientMenuItem
@@ -19,10 +21,13 @@ interface MenuItemCardProps {
 export default function MenuItemCard({ item }: MenuItemCardProps) {
   const { addToCart } = useCart()
   const [showOptions, setShowOptions] = useState(false)
-  const [selectedSize, setSelectedSize] = useState<IExtraPrice | null>(item.sizes?.[0] || null)
+  const [selectedSize, setSelectedSize] = useState<IExtraPrice | null>(
+    item.sizes && item.sizes.length > 0 ? item.sizes[0] : null
+  )
   const [selectedExtras, setSelectedExtras] = useState<IExtraPrice[]>([])
 
-  const hasOptions = item.sizes?.length > 0 || item.extraIngredients?.length > 0
+  const hasOptions = (item.sizes?.length || 0) > 0 || 
+                    (item.extraIngredients?.length || 0) > 0
   const basePrice = item.basePrice || 0
 
   const handleAddToCart = () => {
@@ -31,7 +36,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
       return
     }
     
-    addToCart(item, selectedSize, selectedExtras)
+    addToCart(item, selectedSize || undefined, selectedExtras)
     toast.success(`${item.name} added to cart!`)
     setShowOptions(false)
   }
@@ -47,7 +52,9 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
   const calculateTotalPrice = () => {
     let total = basePrice
     if (selectedSize) total += selectedSize.price
-    selectedExtras.forEach(extra => total += extra.price)
+    if (selectedExtras.length > 0) {
+      total += selectedExtras.reduce((sum, extra) => sum + extra.price, 0)
+    }
     return total
   }
 
@@ -78,11 +85,11 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
                 <p className="text-gray-600">{item.description}</p>
                 
                 {/* Size Selection */}
-                {item.sizes?.length > 0 && (
+                {(item.sizes?.length || 0) > 0 && (
                   <div className="space-y-2">
                     <h4 className="font-medium">Select size</h4>
                     <div className="space-y-2">
-                      {item.sizes.map(size => (
+                      {item.sizes?.map(size => (
                         <Label key={size._id} className="flex items-center gap-2">
                           <Input
                             type="radio"
@@ -100,16 +107,18 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
                 )}
                 
                 {/* Extras Selection */}
-                {item.extraIngredients?.length > 0 && (
+                {(item.extraIngredients?.length || 0) > 0 && (
                   <div className="space-y-2">
                     <h4 className="font-medium">Extra ingredients</h4>
                     <div className="space-y-2">
-                      {item.extraIngredients.map(extra => (
+                      {item.extraIngredients?.map(extra => (
                         <Label key={extra._id} className="flex items-center gap-2">
                           <Input
                             type="checkbox"
                             checked={selectedExtras.some(e => e._id === extra._id)}
-                            onChange={(e) => handleExtraToggle(extra, e.target.checked)}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => 
+                              handleExtraToggle(extra, e.target.checked)
+                            }
                             className="w-4 h-4"
                           />
                           <span className="capitalize">{extra.name}</span>

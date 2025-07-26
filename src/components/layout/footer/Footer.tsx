@@ -4,7 +4,7 @@ const Footer = () => {
   return (
       <footer className="bg-red-900 text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
@@ -24,7 +24,7 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div className="text-center">
             <h3 className="font-bold text-lg mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
@@ -54,43 +54,10 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-
-          {/* Menu Categories */}
-          <div>
-            <h3 className="font-bold text-lg mb-4">Menu</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
-                  Pizzas
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
-                  Pasta
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
-                  Appetizers
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
-                  Desserts
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-300 hover:text-orange-500 transition-colors">
-                  Beverages
-                </a>
-              </li>
-            </ul>
-          </div>
-
           {/* Contact Info */}
-          <div>
-            <h3 className="font-bold text-lg mb-4">Contact Us</h3>
-            <div className="space-y-3">
+          <div className="flex flex-col">
+            <h3 className="font-bold text-lg mb-4 text-center">Contact Us</h3>
+            <div className="space-y-3 flex flex-col items-center text-center">
               <div className="flex items-center space-x-3">
                 <MapPin className="h-5 w-5 text-orange-500" />
                 <span className="text-gray-300">123 Pizza Street, Food City, FC 12345</span>
