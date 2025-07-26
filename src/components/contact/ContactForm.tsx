@@ -1,22 +1,21 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Send, CheckCircle, AlertCircle } from "lucide-react"
+import { Send, CheckCircle } from "lucide-react"
+import { contactFormSchema, FormErrors, ContactFormValues } from "@/lib/validation"
+import { z } from "zod"
 
 export function ContactForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
-  const [error, setError] = useState("")
-  const [formData, setFormData] = useState({
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [formData, setFormData] = useState<ContactFormValues>({
     firstName: "",
     lastName: "",
     email: "",
@@ -26,36 +25,88 @@ export function ContactForm() {
     newsletter: false,
   })
 
+  const validateField = <K extends keyof ContactFormValues>(
+    fieldName: K,
+    value: ContactFormValues[K]
+  ) => {
+    try {
+      const result = contactFormSchema.safeParse({ ...formData, [fieldName]: value });
+      
+      if (!result.success) {
+        const fieldError = result.error.errors.find(e => e.path[0] === fieldName);
+        if (fieldError) {
+          setErrors(prev => ({
+            ...prev,
+            [fieldName]: [fieldError.message]
+          }));
+        }
+      } else {
+        setErrors(prev => ({ ...prev, [fieldName]: undefined }));
+      }
+    } catch (error) {
+      console.error("Validation error:", error);
+    }
+};
+
+  const handleChange = <K extends keyof ContactFormValues>(
+    field: K,
+    value: ContactFormValues[K]
+  ) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+    
+    if (field !== 'newsletter') {
+      validateField(field, value)
+    }
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target
+    handleChange(id as keyof ContactFormValues, value)
+  }
+
+  const handleSelectChange = (value: string) => {
+    handleChange('subject', value)
+  }
+
+  const handleCheckboxChange = (checked: boolean) => {
+    handleChange('newsletter', checked)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setError("")
+    setErrors({})
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
-      // Basic validation
-      if (!formData.firstName || !formData.lastName || !formData.email || !formData.message) {
-        throw new Error("Please fill in all required fields")
+      const result = contactFormSchema.safeParse(formData)
+      if (!result.success) {
+        const fieldErrors: FormErrors = {}
+        result.error.errors.forEach(error => {
+          const fieldName = error.path[0] as keyof FormErrors
+          fieldErrors[fieldName] = fieldErrors[fieldName] || []
+          fieldErrors[fieldName]!.push(error.message)
+        })
+        setErrors(fieldErrors)
+        throw new Error("Form validation failed")
       }
 
-      if (!formData.email.includes("@")) {
-        throw new Error("Please enter a valid email address")
+      const response = await fetch('/api/contact-submission', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(result.data),
+      })
+
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to submit form")
       }
 
       setIsSuccess(true)
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: "",
-        newsletter: false,
-      })
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.")
+    } catch (error) {
+      console.error("Form submission error:", error)
     } finally {
       setIsLoading(false)
     }
@@ -69,7 +120,7 @@ export function ContactForm() {
             <CheckCircle className="h-10 w-10 text-green-600" />
           </div>
           <h3 className="text-2xl font-bold text-gray-900 mb-4">Message Sent!</h3>
-          <p className="text-gray-600 mb-6">Thank you for contacting us. We&apos;ll get back to you within 24 hours.</p>
+          <p className="text-gray-600 mb-6">Thank you for contacting us. We'll get back to you soon.</p>
           <Button
             onClick={() => setIsSuccess(false)}
             className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
@@ -87,20 +138,11 @@ export function ContactForm() {
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Send us a Message</h2>
           <p className="text-gray-600">
-            Fill out the form below and we&apos;ll get back to you as soon as possible. All fields marked with * are
-            required.
+            Fill out the form below. All fields marked with * are required.
           </p>
         </div>
 
-        {error && (
-          <Alert variant="destructive" className="mb-6">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name Fields */}
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName">
@@ -109,11 +151,13 @@ export function ContactForm() {
               <Input
                 id="firstName"
                 value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                onChange={handleInputChange}
                 placeholder="Enter your first name"
                 className="h-12"
-                required
               />
+              {errors.firstName && (
+                <p className="text-sm text-red-500">{errors.firstName[0]}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="lastName">
@@ -122,15 +166,16 @@ export function ContactForm() {
               <Input
                 id="lastName"
                 value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                onChange={handleInputChange}
                 placeholder="Enter your last name"
                 className="h-12"
-                required
               />
+              {errors.lastName && (
+                <p className="text-sm text-red-500">{errors.lastName[0]}</p>
+              )}
             </div>
           </div>
 
-          {/* Contact Fields */}
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="email">
@@ -140,11 +185,13 @@ export function ContactForm() {
                 id="email"
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={handleInputChange}
                 placeholder="Enter your email"
                 className="h-12"
-                required
               />
+              {errors.email && (
+                <p className="text-sm text-red-500">{errors.email[0]}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="phone">Phone Number</Label>
@@ -152,17 +199,22 @@ export function ContactForm() {
                 id="phone"
                 type="tel"
                 value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="Enter your phone number"
+                onChange={handleInputChange}
+                placeholder="+1234567890"
                 className="h-12"
               />
+              {errors.phone && (
+                <p className="text-sm text-red-500">{errors.phone[0]}</p>
+              )}
             </div>
           </div>
 
-          {/* Subject */}
           <div className="space-y-2">
             <Label htmlFor="subject">Subject</Label>
-            <Select value={formData.subject} onValueChange={(value) => setFormData({ ...formData, subject: value })}>
+            <Select 
+              value={formData.subject} 
+              onValueChange={handleSelectChange}
+            >
               <SelectTrigger className="h-12">
                 <SelectValue placeholder="Select a subject" />
               </SelectTrigger>
@@ -176,9 +228,11 @@ export function ContactForm() {
                 <SelectItem value="other">Other</SelectItem>
               </SelectContent>
             </Select>
+            {errors.subject && (
+              <p className="text-sm text-red-500">{errors.subject[0]}</p>
+            )}
           </div>
 
-          {/* Message */}
           <div className="space-y-2">
             <Label htmlFor="message">
               Message <span className="text-red-500">*</span>
@@ -186,26 +240,26 @@ export function ContactForm() {
             <Textarea
               id="message"
               value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+              onChange={handleInputChange}
               placeholder="Tell us how we can help you..."
               className="min-h-32 resize-none"
-              required
             />
+            {errors.message && (
+              <p className="text-sm text-red-500">{errors.message[0]}</p>
+            )}
           </div>
 
-          {/* Newsletter Checkbox */}
           <div className="flex items-center space-x-2">
             <Checkbox
               id="newsletter"
               checked={formData.newsletter}
-              onCheckedChange={(checked) => setFormData({ ...formData, newsletter: checked as boolean })}
+              onCheckedChange={handleCheckboxChange}
             />
             <Label htmlFor="newsletter" className="text-sm text-gray-600">
-              Subscribe to our newsletter for special offers and updates
+              Subscribe to our newsletter
             </Label>
           </div>
 
-          {/* Submit Button */}
           <Button
             type="submit"
             disabled={isLoading}

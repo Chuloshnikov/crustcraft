@@ -97,4 +97,21 @@ export const validateAddress = (data: AddressFields): Partial<Record<keyof Addre
   }
 };
 
+
+export const contactFormSchema = z.object({
+  firstName: z.string().min(1, "First name is required").max(50),
+  lastName: z.string().min(1, "Last name is required").max(50),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().regex(/^\+?[\d\s\-()]{10,20}$/, "Please enter a valid phone number").optional().or(z.literal("")),
+  subject: z.string().optional(),
+  message: z.string().min(10, "Message must be at least 10 characters").max(1000),
+  newsletter: z.boolean().default(false),
+})
+
+export type ContactFormValues = z.infer<typeof contactFormSchema>
+
+export type FormErrors = {
+  [K in keyof ContactFormValues]?: string[]
+}
+
 export type MenuItemFormData = z.infer<typeof MenuItemSchema>;
