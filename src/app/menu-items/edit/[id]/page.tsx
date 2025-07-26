@@ -1,5 +1,6 @@
 "use server"
 import { MenuItemForm } from "@/components/profile/menu-items/MenuItemForm";
+import { connectToDB } from "@/lib/mongoose";
 import { isAdmin } from "@/lib/server/isAdmin";
 import { Category } from "@/models/Category";
 import { MenuItem } from "@/models/MenuItem";
@@ -20,6 +21,7 @@ export default async function EditItem({ params }: PageProps) {
     
   const { id } = params;
 
+  await connectToDB();
   const categories = JSON.parse(JSON.stringify(await Category.find()));
   const item = JSON.parse(JSON.stringify(await MenuItem.findById(id)));
 
