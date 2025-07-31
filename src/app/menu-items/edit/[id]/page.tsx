@@ -1,8 +1,8 @@
 "use server"
 import { MenuItemForm } from "@/components/profile/menu-items/MenuItemForm";
-import { connectToDB } from "@/lib/mongoose";
 import { Category } from "@/models/Category";
 import { MenuItem } from "@/models/MenuItem";
+import mongoose from "mongoose";
 
 interface PageProps {
   params: {
