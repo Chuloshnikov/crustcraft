@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect } from "react"
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -29,6 +29,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { MenuItemFormData, MenuItemSchema } from "@/lib/validation"
 import MenuItemImageUpload from "./MenuItemImageUpload"
+import { isAdmin } from "@/lib/server/isAdmin"
 
 
 interface SizeOption {
@@ -73,7 +74,19 @@ export function MenuItemForm({
   const [isSuccess, setIsSuccess] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [error, setError] = useState("")
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  useEffect(() => {
+    const admin = isAdmin();
+
+    if (!admin) {
+    redirect('/profile');
+  }
+  }, [])
+
+  
+  
+  
 
   const {
     register,

@@ -1,10 +1,8 @@
 "use server"
 import { MenuItemForm } from "@/components/profile/menu-items/MenuItemForm";
 import { connectToDB } from "@/lib/mongoose";
-import { isAdmin } from "@/lib/server/isAdmin";
 import { Category } from "@/models/Category";
 import { MenuItem } from "@/models/MenuItem";
-import { redirect } from "next/navigation";
 
 interface PageProps {
   params: {
@@ -13,11 +11,6 @@ interface PageProps {
 }
 
 export default async function EditItem({ params }: PageProps) {
-  const admin = await isAdmin();
-  
-  if (!admin) {
-    redirect('/profile');
-  }
     
   const { id } = params;
 
