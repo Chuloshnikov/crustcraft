@@ -29,7 +29,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { MenuItemFormData, MenuItemSchema } from "@/lib/validation"
 import MenuItemImageUpload from "./MenuItemImageUpload"
-import { isAdmin } from "@/lib/server/isAdmin"
 
 
 interface SizeOption {
@@ -76,17 +75,6 @@ export function MenuItemForm({
   const [error, setError] = useState("")
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  useEffect(() => {
-    const admin = isAdmin();
-
-    if (!admin) {
-    redirect('/profile');
-  }
-  }, [])
-
-  
-  
-  
 
   const {
     register,
