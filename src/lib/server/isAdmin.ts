@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/authOptions"; 
 import { UserInfo } from "@/models/UserInfo";   
-import mongoose from "mongoose";
+import { connectToDB } from "../mongoose";
 
 export async function isAdmin(): Promise<boolean> {
   const session = await getServerSession(authOptions);
@@ -10,7 +10,7 @@ export async function isAdmin(): Promise<boolean> {
     return false;
   }
 
-  await mongoose.connect(process.env.MONGODB_URI as string);
+  await connectToDB();
   const userInfo = await UserInfo.findOne({ email: userEmail });
   if (!userInfo) {
     return false;

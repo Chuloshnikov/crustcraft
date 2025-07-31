@@ -1,11 +1,11 @@
 "use server"
 import { MenuItemForm } from '@/components/profile/menu-items/MenuItemForm';
+import { connectToDB } from '@/lib/mongoose';
 import { Category } from '@/models/Category';
-import mongoose from 'mongoose';
 
 export default async function NewItem() {
 
-  await mongoose.connect(process.env.MONGODB_URI as string);
+  await connectToDB();
   const categories = JSON.parse(JSON.stringify( await Category.find()));
 
   return (
