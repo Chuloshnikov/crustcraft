@@ -14,7 +14,7 @@ export default async function EditItem({ params }: PageProps) {
     
   const { id } = params;
 
-  await connectToDB();
+  await mongoose.connect(process.env.MONGODB_URI as string);
   const categories = JSON.parse(JSON.stringify(await Category.find()));
   const item = JSON.parse(JSON.stringify(await MenuItem.findById(id)));
 
