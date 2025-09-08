@@ -122,7 +122,7 @@ const Header = () => {
               </a>
               <div className="flex flex-col space-y-2 pt-4">
                    
-                {status === 'loading' ? null : status === 'authenticated' ? (
+                {status === 'authenticated' ? (
                   <>
                   {cartProducts?.length > 0 && (
                     <Button
