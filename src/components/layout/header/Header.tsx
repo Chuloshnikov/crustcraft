@@ -48,7 +48,7 @@ const Header = () => {
           </nav>
           {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center space-x-4">
-                {status === 'loading' ? null : status === 'authenticated' ? (
+                {status === 'authenticated' ? (
                   <div className="flex gap-2 items-center">
                     {cartProducts?.length > 0 && (
                       <Link
@@ -83,6 +83,20 @@ const Header = () => {
                     </Button>
                   </div>
                 ) : (
+                  <>
+                    <Link href="/login">
+                      <Button variant="ghost" className="cursor-pointer text-gray-700 hover:text-orange-600">
+                        Login
+                      </Button>
+                    </Link>
+                    <Link href="/register">
+                      <Button className="cursor-pointer bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
+                        Register
+                      </Button>
+                    </Link>
+                  </>
+              )}
+              {status === 'loading' && (
                   <>
                     <Link href="/login">
                       <Button variant="ghost" className="cursor-pointer text-gray-700 hover:text-orange-600">
